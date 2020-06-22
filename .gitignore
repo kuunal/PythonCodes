@@ -1,0 +1,7 @@
+.vscode/*
+DjangoLoginRegistration/app/Scripts/*
+DjangoLoginRegistration/app/Lib/*
+DjangoLoginRegistration/app/Include/*
+DjangoLoginRegistration/app/pyvenv.cfg
+
+
