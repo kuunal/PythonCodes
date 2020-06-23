@@ -34,9 +34,8 @@ class RegisterViews(APIView):
     
     
 def verify_user(request, token, email):
-    id = force_text(urlsafe_base64_decode(token))
-    user = RegisterModel.objects.get(id=id)
-    print(user)
+    id = force_text(urlsafe_base64_decode(email))
+    user = User.objects.get(email=id)
     user.is_active = True
     user.save()
     return redirect('login')

@@ -20,3 +20,4 @@ class LoginSerializer(serializers.ModelSerializer):
         else:
             raise ValidationError("Invalid")    
        
+       
