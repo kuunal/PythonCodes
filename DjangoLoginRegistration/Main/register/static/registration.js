@@ -1,16 +1,15 @@
     function validate() {
         event.preventDefault();
-        console.log("asdasds");
         let pass = $('#password').val();
-        if (pass.match("^(?=.*[0-9])(?=.*[A-Z])(?=[a-zA-Z0-9]*[^a-zA-Z0-9][a-zA-Z0-9]*$).{8,}")) {
+        if (pass.match("^(?=.*[0-9])(?=.*[A-Z])(?=[a-zA-Z0-9]*[^a-zA-Z0-9][a-zA-Z0-9]*$).{8,}") &&
+        $('#password').val() == $('#password2').val()) {
             // registerUser();
-            $.post("http://localhost:8000/register/",
+            $.post("http://localhost:7000/register/",
                 { 
                     csrfmiddlewaretoken: window.CSRF_TOKEN,
-                    first_name: $('#firstname').val(),
-                    last_name: $('#lastname').val(),
+                    username: $('#username').val(),
+                    password: $('#password').val(),
                     email: $('#email').val(),
-                    password: $('#password').val()
                 }). done(function() {
                     alert("Email registered!");
                 })
