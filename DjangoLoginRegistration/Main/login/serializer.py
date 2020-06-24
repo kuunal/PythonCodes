@@ -1,5 +1,5 @@
 from django import forms
-from register.models import RegisterModel
+# from register.models import RegisterModel
 from rest_framework import serializers
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User

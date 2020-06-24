@@ -2,7 +2,7 @@ from django.shortcuts import redirect, render
 from rest_framework.views import APIView
 from .serializer import RegisterSerializer
 from django.http import JsonResponse
-from .models import RegisterModel
+# from .models import RegisterModel
 from rest_framework.response import Response
 from rest_framework import status
 from Main import settings
@@ -23,13 +23,12 @@ class RegisterViews(APIView):
     def post(self, request):
         user_email = request.POST['email']
         print(request.data)
-        queryset = RegisterModel.objects.all()
+        queryset = User.objects.all()
         serializer = RegisterSerializer(data = request.data)
         if serializer.is_valid():
             serializer.save()
             send_verification(user_email)
-            return Response(serializer.data, status = status.HTTP_201_CREATED)
-        print(serializer.errors)
+            return redirect('login')
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST) 
     
     

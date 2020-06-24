@@ -22,11 +22,10 @@
                 <label for="password"><span id="password">Password:<span></label>
             </div>
             <button type="submit" onclick="authenticate()">Login</button>
-            <p>Not registered? <a href="register.html"> Register</a></p>
+            <p>Not registered? <a href="{% url 'register' %}"> Register</a></p>
             </form>
         </div>
         <div id="image"></div>
         <script type="text/javascript"> window.CSRF_TOKEN = "{{ csrf_token }}"; </script>
-    
     </div>
 {% endblock  %}

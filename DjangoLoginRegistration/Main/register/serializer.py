@@ -1,7 +1,8 @@
 from rest_framework import serializers
-from .models import RegisterModel
+# from .models import RegisterModel
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 
 user_model = get_user_model() 
 
@@ -13,6 +14,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     
     def create(self, validated_data):
+
         register = User(
             email = validated_data['email'],
             username = validated_data['username']
