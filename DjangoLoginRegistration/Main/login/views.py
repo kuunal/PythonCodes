@@ -32,5 +32,5 @@ class UserLoginViews(APIView):
         if not user.check_password(request.data['password']):
             return Response(get_status_codes(401))
         if  not user.is_active: 
-            return Response(get_status_codes(403))
+            return Response(get_status_codes(403)) 
         return Response( get_status_codes(200))
