@@ -12,6 +12,7 @@ from rest_framework.views import APIView
 from django.contrib import auth
 from rest_framework import status
 from status_code import get_status_codes
+from Main import settings
 
 # Create your views here.
 
@@ -33,6 +34,6 @@ class UserLoginViews(APIView):
             return Response(get_status_codes(401))
         if  not user.is_active: 
             return Response(get_status_codes(403)) 
-        # login(request,user)
         data=get_status_codes(200)
+        login(request, user)
         return Response(data)

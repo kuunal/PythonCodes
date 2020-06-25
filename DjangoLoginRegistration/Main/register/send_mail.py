@@ -13,7 +13,8 @@ def send_verification(user_email):
     html_message = render_to_string('register/activate.html',{
         'user_name' : user.values_list('username', flat=True),
         'uid' : urlsafe_base64_encode(force_bytes(user.values_list('id', flat=True))),
-        'email': urlsafe_base64_encode(force_bytes(user_email))
+        'email': urlsafe_base64_encode(force_bytes(user_email)),
+        'host': settings.host
     })
     from_email = settings.EMAIL_HOST_USER
     to_list = [user_email,]

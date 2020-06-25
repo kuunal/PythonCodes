@@ -1,0 +1,199 @@
+body{
+    margin: 0px;
+    padding: 0%;
+    line-height: 1.5em;
+    box-sizing: border-box;
+    overflow: hidden;
+    background-color: rgba(240, 100, 240, 0.2);
+}
+
+li{
+    list-style-type: none;
+}
+
+.container{
+    margin: 0px;
+    padding: 0%;
+    height:60vh;
+    width: 98%;
+}
+
+.container #nav{
+    width: 99%;
+    
+}
+ 
+.container #nav ul{
+    background-color: #333;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    width: 100%;
+    margin-right: 5%;
+    margin-top: auto;
+}
+
+.container #nav ul li{
+    margin-bottom: 0px;
+    font-size: large;
+    padding: 3px;
+    margin-right: 5%;
+}
+
+.container #nav ul li  #logout{
+    flex: 1;
+    color: white;
+    text-decoration: none;
+    margin-bottom: 0px;
+}
+
+
+.container #nav ul li #settings{
+    margin-bottom: 0px;
+    flex: 1;
+    color: white;
+    text-decoration:     none;
+}
+
+.container #nav ul li:first-child{ 
+    flex: 1;
+    color: white;
+}
+
+
+.container .main{
+    display: flex;
+    height: 100%;
+    width: 100%;
+}
+
+::-webkit-scrollbar{
+    width: 10px;
+}   
+/* 
+::-webkit-scrollbar-track{
+    border: 7px solid dodgerblue;
+} */
+
+::-webkit-scrollbar-thumb{
+    background: blueviolet;
+    border-radius: 5px;
+}
+
+.container .contacts{
+    font-weight: 500;
+    opacity: 90%;
+    overflow-y: scroll;
+    height: 550px;
+    width: 20%;
+    border-radius: 5px;
+    border-right: 1px solid lightgray;
+    word-wrap: break-word;
+    overflow-x: hidden;
+    border: 2px solid black;
+}
+
+.list-class{
+    margin-bottom: 2em;
+    width: 80%;
+    border-bottom: 1px  solid  lightgray;
+}
+
+.list-class li:hover{
+    transform: scale(1.2);
+    color: dodgerblue;
+    background-color: rgba(240,240,240.1);
+    border-radius: 5px;
+    transition: all 0.5ms ease;
+}
+
+.main .chat{
+    background-image: url('https://i.pinimg.com/originals/40/39/e0/4039e0f1ef08b7b965bacb4641a7af49.jpg');
+    border: 1px solid black;
+    box-shadow: 0px 0px 6px 5px black;
+    display: flex;
+    margin-left: 0px;
+    flex-direction: column;
+    width: 100%;
+    padding: 3px;
+    height: 550px;
+}
+
+.main .chat #other-user{
+    color: white;
+    padding: 0px;
+    margin: 0px;
+    border-bottom: 1px solid #333;
+    background-color: rgba(100, 100, 100,0.8);
+}
+
+
+.container .chat .other-person {
+    /* border: 2px solid red ; */
+    height: 500px;
+    overflow-y: scroll;
+}
+.container .chat .other-person #chat-container {
+    display: flex;
+}
+
+
+
+.container .chat .other-person #chat-container{
+    display: flex;
+    flex-direction: column;
+    
+}   
+
+
+
+.container .chat .other-person #chat-container .sent{
+    margin-left: auto;
+    margin-bottom: 1em;
+    background-color: rgba(200,200,200,0.4);
+    border-radius: 5px;
+    margin-right: 1em;
+    word-wrap: break-word;
+    max-width: 60%;
+    /* padding: 1em; */
+
+}   
+
+
+.container .chat .other-person #chat-container .recieve{
+    /* padding: 1em 0em; */
+    margin-bottom: 1em;
+    margin-right: auto;
+    max-width: 60%;
+    border-radius: 5px;
+    background-color: rgba(200,200,200,0.4);
+    /* width: auto; */
+
+}   
+
+
+.container .chat input{
+    width: 80%;
+    margin-left: 4%;
+    border: none;
+    border-bottom: 2px solid black;
+    outline: none;
+    height: 1.5em;
+    color: dodgerblue;
+}
+
+.container .chat  input:focus, input:hover{
+    border-bottom: 2px solid dodgerblue;
+    /* box-shadow: 0px 0px 8px black; */
+}
+
+.container .chat button{
+    background: none;
+    color: white;
+    background-color: dodgerblue;
+    border-radius: 5px;
+    outline: none;
+    border: none;
+    height: 2em;
+    width: 10%;
+}
