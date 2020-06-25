@@ -33,4 +33,6 @@ class UserLoginViews(APIView):
             return Response(get_status_codes(401))
         if  not user.is_active: 
             return Response(get_status_codes(403)) 
-        return Response( get_status_codes(200))
+        # login(request,user)
+        data=get_status_codes(200)
+        return Response(data)

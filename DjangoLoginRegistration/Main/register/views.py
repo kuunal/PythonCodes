@@ -14,6 +14,7 @@ from django.utils.encoding import force_bytes, force_text
 from Tools.scripts import generate_token
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from .send_mail import send_verification
+from status_code import get_status_codes
 
 class RegisterViews(APIView):
 
@@ -28,8 +29,8 @@ class RegisterViews(APIView):
         if serializer.is_valid():
             serializer.save()
             send_verification(user_email)
-            return redirect('login')
-        return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST) 
+            return Response(get_status_codes(200))
+        return Response(get_status_codes(400)) 
     
     
 def verify_user(request, token, email):

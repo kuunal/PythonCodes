@@ -10,4 +10,4 @@ status_codes={
 def get_status_codes(id):
     for key, values in status_codes.items():
         if key == id:   
-            return values
+            return {key:values}
