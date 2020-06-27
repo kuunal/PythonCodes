@@ -1,4 +1,5 @@
 from django.shortcuts import redirect, render
+from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from .serializer import RegisterSerializer
 from django.http import JsonResponse
@@ -15,6 +16,8 @@ from Tools.scripts import generate_token
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from .send_mail import send_verification
 from status_code import get_status_codes
+from Main.redis_setup import get_redis_instance
+from .serializer import RegisterSerializer
 
 class RegisterViews(APIView):
 
@@ -39,3 +42,11 @@ def verify_user(request, token, email):
     user.is_active = True
     user.save()
     return redirect('login')
+
+@api_view(('GET',))
+def check(request):
+    redis_instance = get_redis_instance()
+    email = request.headers.get('x_token')
+    if redis_instance.get(email):
+        return Response(302)
+    return Response(200)

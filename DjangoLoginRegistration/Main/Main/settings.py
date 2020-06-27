@@ -20,8 +20,16 @@ DEBUG=(bool, False)
 # reading .env file
 environ.Env.read_env()
 
-host=env('localhost')
+HOST=env('HOST')
+JWT_SECRET_KEY = env('JWT_SECRET_KEY')
+REDIS_PORT=env('REDIS_PORT')
+REDIS_HOST=env('REDIS_HOST')
 
+# REST_FRAMEWORK={
+#     'DEFAULT_AUTHENTICATION_CLASSES':(
+#         'home.backend.JWTAuthentication',
+#     )
+# }
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
