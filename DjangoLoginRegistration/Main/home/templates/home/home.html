@@ -13,15 +13,9 @@
     <div class="container">
         <nav id="nav">
             <ul>
-            {% if email %}
-                <li>Welcome {{ email }}</li>
-                <li><a id="settings">Settings</a></li>
-                <li><a id="logout" >Logout</a></li>
-            {% else %}
                 <li>Welcome</li>
                 <li><a id="settings" href="{% url 'register' %}">Register</a></li>
                 <li><a id="logout" href=" {% url 'login' %}">Login</a></li>
-            {% endif %}
             </ul>
         </nav>
         <div class="main">

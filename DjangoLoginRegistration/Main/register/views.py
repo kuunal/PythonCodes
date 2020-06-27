@@ -26,7 +26,6 @@ class RegisterViews(APIView):
 
     def post(self, request):
         user_email = request.POST['email']
-        print(request.data)
         queryset = User.objects.all()
         serializer = RegisterSerializer(data = request.data)
         if serializer.is_valid():

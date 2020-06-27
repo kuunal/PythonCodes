@@ -1,4 +1,4 @@
-$(document).ready(()=>{
+$(document).ready(function(){
     nav1 = $('#nav ul li:first-child');
     nav2 = $('#nav ul li:nth-child(2) a');
     nav3 = $('#nav ul li:last-child a');
@@ -12,32 +12,31 @@ $(document).ready(()=>{
                 nav1.text("Welcome "+data.user);
                 nav2.text("Settings").css("color","white");  
                 nav3.text("Logout").css("color","white");     
-                console.log(data)        
             }
         }
-    })        
+    });        
 
-
-    $(document).on("onclick",nav3,function(){
+    $(document).on("click","#logout",function(){
         event.preventDefault();
-        console.log("ASSSSSSSSSSSSSSSSSSSSSSSSSSSS")
-        if(nav3.text()==="Login"){
+        if(!localStorage.key(0)){
             window.location = "/login/";
-            console.log("ADADASDASDASDASDASDASDSADSSD")
         }else{
-            localStorage.removeItem(email); 
             $.ajax({
-                url:"/home/logout",
+                url:"/home/logout/",
+                TYPE:"GET",
                 headers:{
                     'x-email':email,
-                    'x-token':token
+                    'x-token': 'bearer ' +token
                 },
-                success: (data)=>{
+                success: function(data){
                     if(data==200){
+                        localStorage.removeItem(email); 
                         window.location = "/login/"; 
+                    }else{
+                        alert(data);
                     }
                 }
-            })
+            });
         }
-    })
+    });
 }); 
