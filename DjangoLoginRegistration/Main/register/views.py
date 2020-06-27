@@ -43,7 +43,7 @@ def verify_user(request, token, email):
     return redirect('login')
 
 @api_view(('GET',))
-def check(request):
+def check_login(request):
     redis_instance = get_redis_instance()
     email = request.headers.get('x_token')
     if redis_instance.get(email):

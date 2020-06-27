@@ -1,12 +1,11 @@
 $(document).ready(()=>  {
-        
     $.ajax({
         url:"/register/check/",
         headers:{
             "x-token" : localStorage.key(0)
         },success: function(data){
             if(data==302){
-                window.location = "/home/"+localStorage.key(0)+"/";
+                window.location = "/home/";
             }
         }
     })
@@ -23,9 +22,8 @@ function authenticate() {
         password: password
     }).done((data) => {
         if (data.status == 200) {
-            console.log("SAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", data.user, data)
             localStorage.setItem(data.user, data.token);
-            window.location = "/home/" + data.user + "/";
+            window.location = "/home/";
         } else {
             for (status in data) {
                 alert(data[status]);
@@ -33,7 +31,7 @@ function authenticate() {
         }
     })
         .fail(() => {
-            // alert(data.status)
+            alert("Something went wrong!");
         })
 
 }

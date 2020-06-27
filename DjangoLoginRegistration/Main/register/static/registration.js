@@ -1,18 +1,16 @@
-$(document).ready(()=>  {
-    
-        $.ajax({
-            url:"/register/check/",
-            headers:{
-                "x-token" : localStorage.key(0)
-            },success: function(data){
-                if(data==302){
-                    window.location = "/home/"+localStorage.key(0)+"/";
-                }
+$(document).ready(()=>{    
+    $.ajax({
+        url:"/register/check/",
+        headers:{
+            "x-token" : localStorage.key(0)
+        },success: function(data){
+            if(data==302){
+                window.location = "/home/";
             }
-        })
-});
+        }
+    });
 
-
+    
     function validate() {
         event.preventDefault();
         let pass = $('#password').val();
@@ -41,3 +39,6 @@ $(document).ready(()=>  {
             alert("Password doest matches given format!");
         }
     }
+
+});
+

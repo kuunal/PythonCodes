@@ -11,7 +11,7 @@ from . import jwt_decode as jawt
 
 class HomeView(APIView):
     redis_instance  = get_redis_instance()
-    def get(self, request, email):
+    def get(self, request):
         if request.headers.get('x_token'):
             token = request.headers.get('x_token').split(' ')[1]
             user_email, payload = jawt.decode(token)
@@ -28,7 +28,6 @@ class HomeView(APIView):
 @api_view(('GET',))
 def logout(request):
     redis_instance  = get_redis_instance()
-    print("Insideeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
     token = request.headers.get('x-token').split(' ')[1]
     user_email, payload = jawt.decode(token)
     for key in redis_instance.scan_iter():

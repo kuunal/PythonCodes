@@ -5,8 +5,11 @@ $(document).ready(function(){
     email=localStorage.key(0);
     token=localStorage.getItem(email);
         $.ajax({
-        url:"/home/"+email+"/",
-        headers:{'x-token': 'bearer ' +token},
+        url:"/home/",
+        headers:{
+            'x-email':email,
+            'x-token': 'bearer ' +token
+        },
         success: function(data){
             if (data.status==200){
                 nav1.text("Welcome "+data.user);

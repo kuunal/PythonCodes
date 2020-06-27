@@ -1,13 +1,10 @@
 from django.urls import path
 from .views import UserLoginViews 
 from django.contrib.auth import views as auth_views
-from register.views import check
+from register.views import check_login
 
 urlpatterns = [
-    # path('', views.login, name="login"),
     path('', UserLoginViews.as_view(), name='login'),
-    path('default', auth_views.LoginView.as_view(), name="log"),
-    path('check', check)
-
+    path('check/', check_login),
 ]
     
