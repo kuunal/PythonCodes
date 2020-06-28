@@ -1,4 +1,3 @@
-$(document).ready(()=>{    
     $.ajax({
         url:"/register/check/",
         headers:{
@@ -10,25 +9,25 @@ $(document).ready(()=>{
         }
     });
 
+
     
-    function validate() {
+    function validation() {
         event.preventDefault();
         let pass = $('#password').val();
         if (pass.match("^(?=.*[0-9])(?=.*[A-Z])(?=[a-zA-Z0-9]*[^a-zA-Z0-9][a-zA-Z0-9]*$).{8,}") &&
         $('#password').val() == $('#password2').val()) {
-            // registerUser();
             $.post("/register/",
                 { 
                     csrfmiddlewaretoken: window.CSRF_TOKEN,
                     username: $('#username').val(),
                     password: $('#password').val(),
                     email: $('#email').val(),
-                }). done(function(data) {
+                }).done(function(data) {
                     for(response in data){
                         if(response==200){
                             window.location="/login/"
                         } else if(response==400)
-                            alert("Email already exist")
+                            alert("Email already exist");
                         
                     }
                 })  
@@ -40,5 +39,7 @@ $(document).ready(()=>{
         }
     }
 
-});
+
+
+
 

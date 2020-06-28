@@ -29,8 +29,7 @@ function authenticate() {
                 alert(data[status]);
             }
         }
-    })
-        .fail(() => {
+    }).fail(() => {
             alert("Something went wrong!");
         })
 

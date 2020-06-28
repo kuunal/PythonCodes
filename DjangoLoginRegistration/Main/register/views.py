@@ -26,8 +26,10 @@ class RegisterViews(APIView):
 
     def post(self, request):
         user_email = request.POST['email']
+        print("Insideeeeeeee")
         queryset = User.objects.all()
         serializer = RegisterSerializer(data = request.data)
+        print("Insideeeeeeee", serializer.is_valid())
         if serializer.is_valid():
             serializer.save()
             send_verification(user_email)
@@ -36,7 +38,7 @@ class RegisterViews(APIView):
     
     
 def verify_user(request, token, email):
-    id = force_text(urlsafe_base64_decode(email))
+    id = force_text(urlsafe_base64_decode(token))
     user = User.objects.get(email=id)
     user.is_active = True
     user.save()

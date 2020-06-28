@@ -3,7 +3,7 @@
 {% block title %}
     <title>Registration Page!</title>
  <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-        <script src="{% static 'registration.js' %}"></script>
+    <script src="{% static 'registration.js' %}"></script>
     <link rel="stylesheet" href=" {% static 'register.css' %} ">
 {% endblock %}
 
@@ -26,11 +26,10 @@
                 <label for="password2" id="pass2">Confirm Password:</label>
                 <input type="password" id="password2" name="password2" placeholder="********" required>
                 <div id="pass-error" class="error"></div>
-                <button type="submit" onclick="validate()">Register</button>
+                <button type="submit" id="submit-btn" onclick="validation()">Register</button>
                 <!-- <hr> -->
                 <p>Already registered? <a href="{% url 'login' %}" class="anchor">click here to login</a></p>
                 </̥̥̥̥form>
-
         </div>
         <div id="image"></div>
     <script type="text/javascript"> window.CSRF_TOKEN = "{{ csrf_token }}"; </script>

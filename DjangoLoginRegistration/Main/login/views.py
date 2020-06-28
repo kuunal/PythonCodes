@@ -84,5 +84,6 @@ class ResetPassView(APIView):
             user.set_password(password)
             user.save()
             return redirect('login')
-        return HttpResponse(400)
+        messages.warning(request, "Password should contain atleast one Capital, Symbol and number")
+        
         
