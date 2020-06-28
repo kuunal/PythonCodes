@@ -15,12 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from login import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("login/", include('login.urls')),
     path("register/", include('register.urls')),
     path("", include('register.urls')),
-    path("home/", include('home.urls'))
-
+    path("home/", include('home.urls')),
+    path('reset/<str:token>/<str:email>/', views.ResetPassView.as_view(), name='reset')
 ]

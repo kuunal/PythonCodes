@@ -1,0 +1,12 @@
+{% extends 'register/base.html' %}
+{% block title %}
+<title>Reset Password</title>
+{% endblock  %}
+
+{% block  content%}
+    <form method="POST">
+    {% csrf_token %}
+        Password:<input type="password" name="password" ><br/>
+        <button type="submit">Submit</button>
+    </form>
+{% endblock  %}

@@ -8,11 +8,13 @@ user_model = get_user_model()
 
 class RegisterSerializer(serializers.ModelSerializer):
 
+
+
     class Meta:
         model = User
         fields = ['username','email','password','is_active'] 
 
-    
+
     def create(self, validated_data):
 
         register = User(
