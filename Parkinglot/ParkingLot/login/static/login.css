@@ -1,0 +1,187 @@
+.container{
+    padding: 0%;
+    margin: 0%;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+a{
+    color: blueviolet;
+}
+
+#error{
+    color: red; 
+}
+button{
+    margin: 2%;
+    border-radius: 5px;
+    border:0;
+    background-color: rgba(0, 0, 0, 0.0);
+    border-bottom: 2px solid dodgerblue;
+    cursor: pointer;
+}
+
+button:hover{
+    background-color: dodgerblue;
+    transition: all 0.9s ease;
+    transform: scale(1.2);
+    color: whitesmoke;
+}
+
+.container #login-form{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    flex-wrap: wrap;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    margin-top: 10%;
+}
+
+.container #login-form #div-email{
+    overflow-x: hidden;
+    margin: 1%;
+    height: 3rem;
+    position: relative;
+}
+
+.container #login-form #div-email input{
+    height: 100%;
+    width: 100%;
+    background: none;
+    padding-bottom: 0px;
+    box-sizing: border-box;
+    padding-top: 30px;
+    border: none;
+    outline: none;
+    background: none;
+    border-bottom: 1px solid black;
+}
+
+.container #login-form #div-email label{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    border-bottom: 2px  black;
+    pointer-events: none;
+}
+
+.container #login-form #div-email label::after{
+    content: "";
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    border-bottom: 2px solid blueviolet;
+    transition: all 0.4s ease;
+    transform: translateX(-100%);
+    overflow: hidden;
+    bottom: 0;
+}
+
+.container #login-form #div-email label #email{
+    position: absolute;
+    bottom: 0;
+    transition: all 0.4s ease;
+}
+
+.container #login-form #div-email input:focus + label  #email{
+    transform: translateY(-150%);
+    color: blueviolet;
+
+}
+
+
+.container #login-form #div-email input:not(:placeholder-shown) + label  #email{
+    transform: translateY(-150%);
+    color: blueviolet;
+    }
+
+
+.container #login-form #div-email input:not(:placeholder-shown) + label::after{
+    transform: translateX(0%);
+
+}
+
+.container #login-form #div-password{
+    overflow-x: hidden;
+    margin: 1%;
+    height: 3rem;
+    position: relative;
+}
+
+.container #login-form #div-password input{
+    background: none;
+    height: 100%;
+    width: 100%;
+    padding-bottom: 0px;
+    box-sizing: border-box;
+    padding-top: 30px;
+    border: none;
+    outline: none;
+    border-bottom: 1px solid black;
+}
+
+.container #login-form #div-password label{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    border-bottom: 2px  black;
+    pointer-events: none;
+}
+
+.container #login-form #div-password label::after{
+    content: "";
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    border-bottom: 2px solid blueviolet;
+    transition: all 0.4s ease;
+    transform: translateX(-100%);
+    overflow: hidden;
+    bottom: 0;
+}
+
+.container #login-form #div-password label #password{
+    position: absolute;
+    bottom: 0;
+    transition: all 0.4s ease;
+}
+
+.container #login-form #div-password input:focus + label  #password{
+    transform: translateY(-150%);
+    color: blueviolet;
+
+}
+
+
+.container #login-form #div-password input:not(:placeholder-shown) + label  #password{
+    transform: translateY(-150%);
+    color: blueviolet;
+    }
+
+
+.container #login-form #div-password input:not(:placeholder-shown) + label::after{
+    transform: translateX(0%);
+
+}
+
+
+.container #image{
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: url('https://st.depositphotos.com/1092019/3536/i/950/depositphotos_35365873-stock-photo-white-keyboard-with-register-button.jpg');
+    background-size: cover;
+    height: 100%;
+    width: 100%;
+    z-index: -1;
+    opacity: 70%;
+}
+
+.container #image:hover{
+    opacity: 100%;
+}

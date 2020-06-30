@@ -11,9 +11,24 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+import environ
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
+
+env = environ.Env(
+# set casting, default value
+DEBUG=(bool, False)
+)
+# reading .env file
+environ.Env.read_env()
+
+HOST=env('HOST')
+JWT_SECRET_KEY = env('JWT_SECRET_KEY')
+REDIS_PORT=env('REDIS_PORT')
+REDIS_HOST=env('REDIS_HOST')
 
 
 # Quick-start development settings - unsuitable for production
@@ -31,6 +46,11 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'rest_framework',
+    'staff',
+    'main',
+    'login',
+    'register',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
