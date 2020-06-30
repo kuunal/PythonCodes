@@ -26,10 +26,8 @@ class RegisterViews(APIView):
 
     def post(self, request):
         user_email = request.POST['email']
-        print("Insideeeeeeee")
         queryset = User.objects.all()
         serializer = RegisterSerializer(data = request.data)
-        print("Insideeeeeeee", serializer.is_valid())
         if serializer.is_valid():
             serializer.save()
             send_verification(user_email)
@@ -49,5 +47,5 @@ def check_login(request):
     redis_instance = get_redis_instance()
     email = request.headers.get('x_token')
     if redis_instance.get(email):
-        return Response(302)
-    return Response(200)
+        return Response(202)
+    return Response(300)
