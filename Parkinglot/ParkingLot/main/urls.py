@@ -13,6 +13,5 @@ router.register('parkingtype', ParkingTypeView)
 
 urlpatterns = [
     path('park/', include(router.urls))
-    # path('park/', ParkingView.as_view())
     
 ]

@@ -47,5 +47,6 @@ def check_login(request):
     redis_instance = get_redis_instance()
     email = request.headers.get('x_token')
     if redis_instance.get(email):
-        return Response(202)
-    return Response(300)
+
+        return Response(200)
+    return Response(400)

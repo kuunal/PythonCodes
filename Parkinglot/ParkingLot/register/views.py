@@ -17,16 +17,17 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from .send_mail import send_verification
 from status_code import get_status_codes
 from ParkingLot.redis_setup import get_redis_instance
-from .serializer import RegisterSerializer
+from .serializer import RegisterSerializer, RoleSerializer
 
 class RegisterViews(APIView):
 
-
+    serializer_class = RegisterSerializer
     def post(self, request):
         user_email = request.POST['email']
         queryset = User.objects.all()
         serializer = RegisterSerializer(data = request.data)
         if serializer.is_valid():
+            print("Insideeeeeeeeeeeeeeeeeeeee")
             serializer.save()
             send_verification(user_email)
             return Response(get_status_codes(200))

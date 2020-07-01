@@ -30,9 +30,7 @@ from django.utils.encoding import force_text
 class UserLoginViews(APIView):
     serializer_class = LoginSerializer
     redis_instance = get_redis_instance()
-    def get(self, request):
-        return render(request,'registration/login.html')
-
+  
 
     def post(self, request):
         email = request.data['email']

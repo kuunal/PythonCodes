@@ -1,5 +1,5 @@
 from django.db import models
-from staff.models import UserModel, RoleModel     
+from register.models import  RoleModel     
 from django.contrib.auth.models import User
 
 vehicle_type= (

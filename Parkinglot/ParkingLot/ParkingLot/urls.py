@@ -20,9 +20,9 @@ from login import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path("login/", include('login.urls')),
-    # path("register/", include('register.urls')),
-    # path("", include('register.urls')),
-    # path('reset/<str:token>/<str:email>/', views.ResetPassView.as_view(), name='reset'),
+    path("login/", include('login.urls')),
+    path("register/", include('register.urls')),
+    path("", include('register.urls')),
+    path('reset/<str:token>/<str:email>/', views.ResetPassView.as_view(), name='reset'),
     path('vehicle/', include('main.urls'))
 ]

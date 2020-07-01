@@ -1,8 +1,10 @@
 from rest_framework import serializers
-# from .models import RegisterModel
+from .models import RoleModel
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+
+
 
 user_model = get_user_model() 
 
@@ -12,40 +14,28 @@ charges={
     'security': 3,
     'driver': 10
 }
+class RoleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RoleModel
+        fields = ('role',) 
 
 class RegisterSerializer(serializers.ModelSerializer):
-
+    role = RoleSerializer()
     class Meta:
         model = User
-        fields = ['username','email','password','is_active'] 
-
+        fields = ('username','email','password','role') 
 
     def create(self, validated_data):
 
-        register = User(
+        registered_user = User(
             email = validated_data['email'],
             username = validated_data['username']
         )
-        register.is_active=False
-        register.set_password(validated_data['password'])
+        registered_user.is_active=False
+        registered_user.set_password(validated_data['password'])
 
-        role = RoleModel(
-            role = validated_data['role'],
-            charges = charges.get(validated_data['charges'])
-        )
-        register.save()
-        return register
+        registered_user.save()
+        return registered_user
 
 
         
-role=(
-    ('driver','driver'),
-    ('police','police'),
-    ('security','security'),
-    ('owner','owner')
-)
-
-class RoleModel(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    role= models.CharField(max_length= 100, choices= role)
-    charge= models.IntegerField()
