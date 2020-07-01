@@ -1,6 +1,7 @@
 from django.db import models
 from register.models import  RoleModel     
 from django.contrib.auth.models import User
+# from ParkingLot.settings import User
 
 vehicle_type= (
     ('car','car'),
@@ -26,13 +27,17 @@ class ParkingTypeModel(models.Model):
 
 class ParkingModel(models.Model):
     parking_slot = models.IntegerField(null= False)
+    # role = 
     vehicle_number = models.CharField(max_length= 10,null= False)
     vehicle_type = models.ForeignKey(VehicleTypeModel, on_delete=models.DO_NOTHING)
     entry_time = models.DateTimeField(auto_now=True)
     parking_type = models.ForeignKey(ParkingTypeModel, on_delete=models.DO_NOTHING)
     driver_type = models.ForeignKey(User, default=None, on_delete=models.DO_NOTHING)
     disabled = models.BooleanField(default=False)
-    exit_time = models.DateTimeField(auto_now=False, auto_now_add=False)
+    exit_time = models.DateTimeField(auto_now=False, auto_now_add=False, null=True )
+    
+    def __str__(self):
+        return f'{self.parking_slot} {self.vehicle_number}'
 
 
 driver_type=(
@@ -47,8 +52,8 @@ class ParkingSlotModel(models.Model):
     driver= models.ForeignKey(User, on_delete=models.DO_NOTHING)
     parking_type= models.ForeignKey(ParkingTypeModel, on_delete=models.CASCADE) 
     
-    def __str__(self):
-        return self.parking_slot
+    def __str__(self):  
+        return self.slot_id
 
 class ParkingLotModel(models.Model):
     slot_id= models.ForeignKey(ParkingSlotModel,default=None, on_delete=models.DO_NOTHING)

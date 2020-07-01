@@ -23,7 +23,8 @@ from register.send_mail import send_verification
 from register.serializer import RegisterSerializer
 from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_text
- 
+from django.views.decorators.csrf import csrf_exempt
+
 
 # Create your views here.
 
@@ -31,14 +32,14 @@ class UserLoginViews(APIView):
     serializer_class = LoginSerializer
     redis_instance = get_redis_instance()
   
-
+    @csrf_exempt
     def post(self, request):
         email = request.data['email']
         if email is None:
             return Response(get_status_codes(400))
         try:
             user = User.objects.get(email=email)
-        except Exception:
+        except User.DoesNotExist:
             return Response(get_status_codes(401))
         if not user.check_password(request.data['password']):
             return Response(get_status_codes(401))
@@ -51,8 +52,6 @@ class UserLoginViews(APIView):
             "status":200
         }
         UserLoginViews.redis_instance.set(email, auth_token)
-        # login(request, user)
-        user =  request.user.is_authenticated       
         return Response(data)
 
 class ForgotPassView(APIView):

@@ -1,8 +1,9 @@
 status_codes={
     200:"ok",
-    400:"Invalid Email",
-    401:"Invalid id or password",
-    403:"please verify your email. Link has been sent to you!",
+    201:"created",
+    400:"Bad Request",
+    401:"Unauthorized",
+    403:"Forbidded",
     404:"page_not_found",
     500:"server_error"
 }

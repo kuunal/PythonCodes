@@ -52,13 +52,14 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+# AUTH_USER_MODEL = 'register.User'
 # Application definition
 
 INSTALLED_APPS = [
+    'register',
     'rest_framework',
     'main',
     'login',
-    'register',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

@@ -4,26 +4,31 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializer import ParkingTypeSerializer, VehicleSerializer, ParkingSerializer
-from .get_parking_slot import get_slots
+from .get_parking_slot import get_slot
 from django.http import HttpResponse
-from .models import ParkingTypeModel, VehicleTypeModel, ParkingModel
+from .models import ParkingTypeModel, VehicleTypeModel, ParkingModel, ParkingSlotModel
+from ParkingLot.redis_setup import get_redis_instance
+from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
+
 
 
 class ParkingView(viewsets.ModelViewSet):
     queryset = ParkingModel.objects.all()
     serializer_class = ParkingSerializer
+    
+    # def perform_create(self, serializer):
+       
+        
+        
 
 class VehicleTypeView(viewsets.ModelViewSet):
     queryset = VehicleTypeModel.objects.all()
-    serializer_class = VehicleTypeModel
+    serializer_class = VehicleSerializer
 
 class ParkingTypeView(viewsets.ModelViewSet):
     queryset = ParkingTypeModel.objects.all()
-    serializer_class = ParkingTypeModel
-
-
-
-
+    serializer_class = ParkingTypeSerializer
 
 
 

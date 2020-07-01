@@ -23,15 +23,14 @@ class RegisterViews(APIView):
 
     serializer_class = RegisterSerializer
     def post(self, request):
-        user_email = request.POST['email']
         queryset = User.objects.all()
+        user_email = request.data['email']
         serializer = RegisterSerializer(data = request.data)
         if serializer.is_valid():
-            print("Insideeeeeeeeeeeeeeeeeeeee")
             serializer.save()
             send_verification(user_email)
             return Response(get_status_codes(200))
-        return Response(get_status_codes(400)) 
+        return Response(serializer.errors)
     
     
 def verify_user(request, token, email):
