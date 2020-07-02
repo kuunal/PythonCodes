@@ -31,7 +31,7 @@ class ParkingModel(models.Model):
     # role = 
     vehicle_number = models.CharField(max_length= 10,null= False)
     vehicle_type = models.ForeignKey(VehicleTypeModel, on_delete=models.DO_NOTHING)
-    entry_time = models.DateTimeField(default=datetime.now)
+    entry_time = models.DateTimeField(auto_now=False, auto_now_add=False, blank=True)
     parking_type = models.ForeignKey(ParkingTypeModel, on_delete=models.DO_NOTHING)
     driver_type = models.ForeignKey(User, default=None, on_delete=models.DO_NOTHING)
     disabled = models.BooleanField(default=False)

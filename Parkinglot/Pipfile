@@ -9,6 +9,11 @@ verify_ssl = true
 django = "*"
 djangorestframework = "*"
 mysqlclient = {path = "C:/Users/Sagar/Downloads/mysqlclient-1.4.6-cp38-cp38-win32.whl"}
+jwt = "*"
+redis = "*"
+environ = "*"
+django-environ = "*"
+pyjwt = "*"
 
 [requires]
 python_version = "3.8"

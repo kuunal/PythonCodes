@@ -10,5 +10,6 @@ def get_slot():
     elif unparked_slot:
         return unparked_slot.id
     else:
-        return slot.objects.latest('id').id + 1   
+        return slot.objects.latest('id').id + 1  
+    # pass 
 

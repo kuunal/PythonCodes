@@ -31,7 +31,6 @@ REDIS_PORT=env('REDIS_PORT')
 REDIS_HOST=env('REDIS_HOST')
 
 
-
 from .email_info import *
 EMAIL_USE_TLS = EMAIL_USE_TLS
 EMAIL_HOST = EMAIL_HOST
@@ -105,7 +104,7 @@ WSGI_APPLICATION = 'ParkingLot.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'parkinglot3',
+        'NAME': 'parkinglot4',
         'USER':'root',
         'PASSWORD':'1234',
         'HOST':'localhost',
@@ -138,13 +137,15 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = "Asia/Kolkata"
+
+# TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False  
 
 
 # Static files (CSS, JavaScript, Images)

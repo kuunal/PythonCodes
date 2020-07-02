@@ -26,7 +26,7 @@ class ParkingTypeSerializer(serializers.ModelSerializer):
 
 class ParkingSerializer(serializers.ModelSerializer):
     parking_slot = serializers.HiddenField(default=get_slot())
-
+    entry_time = serializers.HiddenField(default=datetime.now())
     parking_type = ParkingTypeSerializer
     vehicle_type = VehicleSerializer    
     class Meta:
