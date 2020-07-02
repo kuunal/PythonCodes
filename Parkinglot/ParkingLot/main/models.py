@@ -2,6 +2,7 @@ from django.db import models
 from register.models import  RoleModel     
 from django.contrib.auth.models import User
 # from ParkingLot.settings import User
+from datetime import datetime
 
 vehicle_type= (
     ('car','car'),
@@ -30,7 +31,7 @@ class ParkingModel(models.Model):
     # role = 
     vehicle_number = models.CharField(max_length= 10,null= False)
     vehicle_type = models.ForeignKey(VehicleTypeModel, on_delete=models.DO_NOTHING)
-    entry_time = models.DateTimeField(auto_now=True)
+    entry_time = models.DateTimeField(default=datetime.now)
     parking_type = models.ForeignKey(ParkingTypeModel, on_delete=models.DO_NOTHING)
     driver_type = models.ForeignKey(User, default=None, on_delete=models.DO_NOTHING)
     disabled = models.BooleanField(default=False)
@@ -51,13 +52,14 @@ class ParkingSlotModel(models.Model):
     slot_id = models.IntegerField()
     driver= models.ForeignKey(User, on_delete=models.DO_NOTHING)
     parking_type= models.ForeignKey(ParkingTypeModel, on_delete=models.CASCADE) 
-    
-    def __str__(self):  
-        return self.slot_id
+    vehicle_number = models.CharField(max_length=10, null=False)
+
+    def __str__(self):
+        return f'{self.slot_id} {self.parking_type} '
 
 class ParkingLotModel(models.Model):
     slot_id= models.ForeignKey(ParkingSlotModel,default=None, on_delete=models.DO_NOTHING)
     parking_type= models.ForeignKey(ParkingTypeModel, on_delete=models.DO_NOTHING)
     driver= models.CharField(max_length= 100, choices= driver_type)
 
-    
+            

@@ -8,11 +8,18 @@ from django.core.exceptions import ValidationError
 
 
 # user_model = get_user_model() 
+role=(
+    ('driver','driver'),
+    ('police','police'),
+    ('security','security'),
+    ('owner','owner')
+)
 
 class RegisterSerializer(serializers.ModelSerializer):
+    role = serializers.ChoiceField(choices=role)
     class Meta:
         model = User
-        fields = ('username','email','password',) 
+        fields = ('username','email','password','role') 
 
     def validate(self, validated_data):
         email = validated_data['email']
@@ -29,12 +36,12 @@ class RegisterSerializer(serializers.ModelSerializer):
         registered_user = User(
             email = validated_data['email'],
             username = validated_data['username']
-
         )
         registered_user.is_active=False
         registered_user.set_password(validated_data['password'])
-
         registered_user.save()
+        # user_role = RoleModel(registered_user.id)
+        # user_role.save()
         return registered_user
 
 

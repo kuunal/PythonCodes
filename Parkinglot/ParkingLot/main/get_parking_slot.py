@@ -1,15 +1,14 @@
-from .models import ParkingSlotModel
+from .models import ParkingSlotModel as slot
 from django.core.exceptions import ValidationError
 
 def get_slot():
-    try:
-        current_slot_position = ParkingSlotModel.objects.latest(id)
-    except Exception:
+    unparked_slot = slot.objects.filter(vehicle_number="null").first()
+    if unparked_slot == None and slot.objects.count() == 0:
         return 1
+    elif unparked_slot == None and slot.objects.count() == 400:
+        raise ValidationError("Lot Full")
+    elif unparked_slot:
+        return unparked_slot.id
     else:
-        if  ParkingSlotModel.objects.latest(id) < 400:
-            return current_slot_position+1 
-        else:
-            if ParkingSlotModel.objects.first(driver=None) == None:
-                raise ValidationError("Lot Full")
+        return slot.objects.latest('id').id + 1   
 

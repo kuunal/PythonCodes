@@ -28,8 +28,9 @@ class RegisterViews(APIView):
         serializer = RegisterSerializer(data = request.data)
         if serializer.is_valid():
             serializer.save()
+
             send_verification(user_email)
-            return Response(get_status_codes(200))
+            return Response(get_status_codes(201))
         return Response(serializer.errors)
     
     

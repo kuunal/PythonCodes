@@ -1,46 +1,61 @@
 from rest_framework import serializers
+from django.shortcuts import get_object_or_404
 from .get_parking_slot import get_slot
 from django.contrib.auth.models import User 
 from .models import (ParkingLotModel, ParkingModel, ParkingSlotModel,
                      ParkingTypeModel, VehicleTypeModel)
 from ParkingLot.redis_setup import get_redis_instance
 from django.core.exceptions import ValidationError
-
-
-class ParkSerializer(serializers.HyperlinkedModelSerializer):
+from status_code import get_status_codes
+from datetime import datetime
+class ParkSerializer(serializers.ModelSerializer):
     class Meta:
         model = ParkingModel
         fields = '__all__'
 
-class VehicleSerializer(serializers.HyperlinkedModelSerializer):
+class VehicleSerializer(serializers.ModelSerializer):
     class Meta:
         model = VehicleTypeModel
-        fields = ['vehicle_type', 'charge', 'url']
+        fields = ['vehicle_type', 'charge']
 
-class ParkingTypeSerializer(serializers.HyperlinkedModelSerializer):
+class ParkingTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = ParkingTypeModel
-        fields = ('parking_type','url', 'charge')
+        fields = ('parking_type', 'charge')
 
 
-class ParkingSerializer(serializers.HyperlinkedModelSerializer):
+class ParkingSerializer(serializers.ModelSerializer):
     parking_slot = serializers.HiddenField(default=get_slot())
+
+    parking_type = ParkingTypeSerializer
+    vehicle_type = VehicleSerializer    
     class Meta:
         model = ParkingModel    
-        fields = ('parking_slot','vehicle_number', 'disabled', 'parking_type', 'vehicle_type', 'exit_time')
+        fields = ('parking_slot','vehicle_number', 'disabled', 'parking_type', 'vehicle_type', 'entry_time')
 
     def create(self, validated_data):
-        # user = is_authentic(request.headers.get('x_token'))
-        user = User.objects.get(email="zzzaxwk@gmail.com") #testing
-        if not user:
-            raise ValidationError("Unauthorized")
-        park_vehicle = ParkingSlotModel( slot_id = get_slot(),
-                                            driver = user,
-                                            parking_type = validated_data.get('parking_type') )
+    #     # user = is_authentic(request.headers.get('x_token'))
+        user = get_object_or_404(User,email="asdf@gmail.com") 
+        parking_model_instance = ParkingModel(**validated_data)
+        vehicle_number = validated_data.get('vehicle_number')
+        if len(ParkingSlotModel.objects.filter(vehicle_number=vehicle_number)) > 0:
+            raise ValidationError("vehicle already parked")
+        park_vehicle = ParkingSlotModel.objects.filter(vehicle_number="null").first()
+        if park_vehicle:
+            slot_id=get_slot()
+            park_vehicle.vehicle_number = vehicle_number
+            park_vehicle.driver = user
+            parking_type=validated_data.get('parking_type')
+        else:
+            park_vehicle = ParkingSlotModel.objects.create(slot_id=get_slot(),
+                                                    driver=user,
+                                                    parking_type=validated_data.get('parking_type'),
+                                                    vehicle_number=vehicle_number)
         park_vehicle.save()
-        
+        parking_model_instance.save()
+        return validated_data
 
-class ParkingLotSerializer(serializers.HyperlinkedModelSerializer):
+class ParkingSlotSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ParkingLotModel
+        model = ParkingSlotModel
         fields = '__all__'
