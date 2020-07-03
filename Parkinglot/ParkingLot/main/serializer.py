@@ -8,6 +8,8 @@ from ParkingLot.redis_setup import get_redis_instance
 from django.core.exceptions import ValidationError
 from status_code import get_status_codes
 from datetime import datetime
+from vehicle.models import VehicleInformationModel as Vehicle
+
 
 class ParkSerializer(serializers.ModelSerializer):
     class Meta:
@@ -37,8 +39,10 @@ class ParkingSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
     #     # User = is_authentic(request.headers.get('x_token'))
         user = get_object_or_404(User,email="asdf@gmail.com") 
+        vehicle_number = validated_data.get('vehicle_number').vehicle_number_plate
+        # vehicle_object = get_object_or_404(Vehicle, vehicle_number_plate=vehicle_number)
+        # validated_data['vehicle_number']=vehicle_object
         parking_model_instance = ParkingModel(**validated_data)
-        vehicle_number = validated_data.get('vehicle_number')
         if len(ParkingSlotModel.objects.filter(vehicle_number=vehicle_number)) > 0:
             raise ValidationError("vehicle already parked")
         park_vehicle = ParkingSlotModel.objects.filter(vehicle_number="null").first()

@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'main',
     'login',
+    'vehicle',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -104,7 +105,7 @@ WSGI_APPLICATION = 'ParkingLot.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'parkinglot6',
+        'NAME': 'parkinglot9',
         'USER':'root',
         'PASSWORD':'1234',
         'HOST':'localhost',
