@@ -6,6 +6,7 @@ from ParkingLot import settings
 from django.core.mail import send_mail
 from django.contrib.auth.models import User
 
+
 def send_verification(user_email, subject="Account created successfully", host=settings.HOST):
     user = User.objects.filter(email=user_email)
     subject = subject
@@ -18,4 +19,4 @@ def send_verification(user_email, subject="Account created successfully", host=s
     })
     from_email = settings.EMAIL_HOST_USER
     to_list = [user_email,]
-    send_mail(subject, message, from_email, to_list, html_message=html_message )
+    send_mail(subject, message, from_email, to_list, html_message=html_message)

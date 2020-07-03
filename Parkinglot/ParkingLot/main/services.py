@@ -33,6 +33,7 @@ def calculate_charges(instance):
     vehicle_type_charge = instance.vehicle_type.charge
     instance.exit_time = timezone.now()
     entry_time = instance.entry_time
+    instance.save()
     print(instance.exit_time, instance.entry_time)
     total_parked_time = (instance.exit_time-instance.entry_time)
     total_hours = total_parked_time.total_seconds()//(60*60)

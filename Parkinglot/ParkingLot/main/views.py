@@ -8,6 +8,7 @@ from .serializer import ParkingTypeSerializer, VehicleSerializer, ParkingSeriali
 from .get_parking_slot import get_slot
 from django.http import HttpResponse
 from .models import ParkingTypeModel, VehicleTypeModel, ParkingModel, ParkingSlotModel
+from vehicle.models import VehicleInformationModel as vehicle
 from ParkingLot.redis_setup import get_redis_instance
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
@@ -18,7 +19,9 @@ from .services import unpark
 class ParkingView(viewsets.ModelViewSet):
     queryset = ParkingModel.objects.all()
     serializer_class = ParkingSerializer
-    
+    lookup_field = 'vehicle_number__vehicle_number_plate'
+
+
     def perform_create(self, serializer):
         user = get_object_or_404(User,email="asdf@gmail.com")  
         serializer.save(driver_type=user)
@@ -32,7 +35,7 @@ class ParkingView(viewsets.ModelViewSet):
             return Response(get_status_codes(404))
         return Response({'message':'Unparked','charges':charges})
         
-        
+              
 
 class VehicleTypeView(viewsets.ModelViewSet):
     queryset = VehicleTypeModel.objects.all()
