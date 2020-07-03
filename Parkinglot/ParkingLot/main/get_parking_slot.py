@@ -11,5 +11,4 @@ def get_slot():
         return unparked_slot.id
     else:
         return slot.objects.latest('id').id + 1  
-    # pass 
-
+    # pass

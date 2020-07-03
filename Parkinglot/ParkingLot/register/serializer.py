@@ -6,11 +6,13 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 
 
-
-# user_model = get_user_model() 
+charges={
+    'owner': 0,
+    'security': 3,
+    'driver': 10
+}
 role=(
     ('driver','driver'),
-    ('police','police'),
     ('security','security'),
     ('owner','owner')
 )
@@ -40,17 +42,14 @@ class RegisterSerializer(serializers.ModelSerializer):
         registered_user.is_active=False
         registered_user.set_password(validated_data['password'])
         registered_user.save()
-        # user_role = RoleModel(registered_user.id)
-        # user_role.save()
+        role = validated_data['role']
+        user_role = RoleModel(user=registered_user,role=role, charge=charges[role])
+        user_role.save()
         return registered_user
 
 
-charges={
-    'owner': 0,
-    'police': 2,
-    'security': 3,
-    'driver': 10
-}
+
+
 
 class RoleSerializer(serializers.ModelSerializer):
     user = RegisterSerializer()

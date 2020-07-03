@@ -1,7 +1,6 @@
 from django.db import models
 from register.models import  RoleModel     
 from django.contrib.auth.models import User
-# from ParkingLot.settings import User
 from datetime import datetime
 
 vehicle_type= (
@@ -48,7 +47,7 @@ driver_type=(
         ('owner','owner')
     )
 
-class ParkingSlotModel(models.Model):
+class   ParkingSlotModel(models.Model):
     slot_id = models.IntegerField()
     driver= models.ForeignKey(User, on_delete=models.DO_NOTHING)
     parking_type= models.ForeignKey(ParkingTypeModel, on_delete=models.CASCADE) 

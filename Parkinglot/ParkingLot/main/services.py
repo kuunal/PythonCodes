@@ -6,6 +6,8 @@ from django.utils import timezone
 from status_code import get_status_codes
 from rest_framework.response import Response
 from django.core.exceptions import ValidationError
+from register.models import RoleModel
+
 
 # def is_authentic(token):
 #     redis_instance = get_redis_instance()
@@ -16,9 +18,17 @@ from django.core.exceptions import ValidationError
 DEFAULT_CHARGES = 15
 
 def unpark(instance):
-    slot_object = get_object_or_404(slot,id=instance.id)
-    if slot_object.vehicle_number == "null":
+    slot_object = get_object_or_404(slot,slot_id=instance.parking_slot)
+    if slot_object.vehicle_number == "null" :
         raise ValidationError("No such vehicle parked!")
+    
+    total_charges = calculate_charges(instance)
+    print(total_charges)
+    slot_object.vehicle_number = "null"
+    slot_object.save()
+    return total_charges
+
+def calculate_charges(instance):
     parking_type_charge = instance.parking_type.charge
     vehicle_type_charge = instance.vehicle_type.charge
     instance.exit_time = timezone.now()
@@ -26,13 +36,8 @@ def unpark(instance):
     print(instance.exit_time, instance.entry_time)
     total_parked_time = (instance.exit_time-instance.entry_time)
     total_hours = total_parked_time.total_seconds()//(60*60)
-    total_charges = calculate_charges(parking_type_charge, vehicle_type_charge, total_hours)
-    print(total_charges)
-    slot_object.vehicle_number = "null"
-    slot_object.save()
-    return total_charges
 
-def calculate_charges(parking_type_charge, vehicle_type_charge, total_parked_time):
-    if total_parked_time > 1 :
-        total_parked_time*2
-    return DEFAULT_CHARGES + vehicle_type_charge + parking_type_charge + total_parked_time
+    if total_hours > 1 :
+        total_hours*2
+
+    return DEFAULT_CHARGES + vehicle_type_charge + parking_type_charge + total_hours + get_object_or_404(RoleModel, user=instance.driver_type).charge

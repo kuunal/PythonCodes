@@ -104,7 +104,7 @@ WSGI_APPLICATION = 'ParkingLot.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'parkinglot4',
+        'NAME': 'parkinglot6',
         'USER':'root',
         'PASSWORD':'1234',
         'HOST':'localhost',
