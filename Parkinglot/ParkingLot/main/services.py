@@ -7,7 +7,7 @@ from status_code import get_status_codes
 from rest_framework.response import Response
 from django.core.exceptions import ValidationError
 from register.models import RoleModel
-
+from . import tasks
 
 # def is_authentic(token):
 #     redis_instance = get_redis_instance()
@@ -26,6 +26,7 @@ def unpark(instance):
     print(total_charges)
     slot_object.vehicle_number = "null"
     slot_object.save()
+    tasks.send_mail_to_user_when_vehicle_is_unparked.delay(instance.vehicle_number.vehicle_owner_email, total_charges)
     return total_charges
 
 def calculate_charges(instance):

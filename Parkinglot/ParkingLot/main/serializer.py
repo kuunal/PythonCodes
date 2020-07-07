@@ -38,13 +38,14 @@ class ParkingSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
     #     # User = is_authentic(request.headers.get('x_token'))
-        user = get_object_or_404(User,email="asdf@gmail.com") 
+        user = get_object_or_404(User,email="zzzaxwk@gmail.com") 
         vehicle_number = validated_data.get('vehicle_number').vehicle_number_plate
         # vehicle_object = get_object_or_404(Vehicle, vehicle_number_plate=vehicle_number)
         # validated_data['vehicle_number']=vehicle_object
         parking_model_instance = ParkingModel(**validated_data)
         if len(ParkingSlotModel.objects.filter(vehicle_number=vehicle_number)) > 0:
             raise ValidationError("vehicle already parked")
+            return
         park_vehicle = ParkingSlotModel.objects.filter(vehicle_number="null").first()
         if park_vehicle:
             slot_id=get_slot()

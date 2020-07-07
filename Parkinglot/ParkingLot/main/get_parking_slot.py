@@ -1,12 +1,16 @@
 from .models import ParkingSlotModel as slot
 from django.core.exceptions import ValidationError
+from . import tasks
+from django.contrib.auth.models import User
+
 
 def get_slot():
     unparked_slot = slot.objects.filter(vehicle_number="null").first()
     if unparked_slot == None and slot.objects.count() == 0:
         return 1
-    elif unparked_slot == None and slot.objects.count() == 400:
-        raise ValidationError("Lot Full")
+    elif unparked_slot != None and slot.objects.count() > 3:
+        tasks.send_mail_to_owner_when_lot_is_full("Lit is full")  
+        raise ValidationError("Lot Full")   
     elif unparked_slot:
         return unparked_slot.id
     else:

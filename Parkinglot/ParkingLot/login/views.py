@@ -55,7 +55,7 @@ class UserLoginViews(APIView):
 
 class ForgotPassView(APIView):
     def get(self, request):
-        return   render(request, "registration/forgotpassword.html")
+        return render(request, "registration/forgotpassword.html")
 
     def post(self, request):   
         email = request.data.get('email') 

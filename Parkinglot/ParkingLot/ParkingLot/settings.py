@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 import environ
+# import django
+# os.environ.setdefault("DJANGO_SETTINGS_MODULE", __file__)
+
+# django.setup()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -29,7 +33,11 @@ HOST=env('HOST')
 JWT_SECRET_KEY = env('JWT_SECRET_KEY')
 REDIS_PORT=env('REDIS_PORT')
 REDIS_HOST=env('REDIS_HOST')
-
+DATABASE_NAME = env('DATABASE_NAME')
+DATABASE_USER = env('DATABASE_USER')
+DATABASE_PASSWORD = env('DATABASE_PASSWORD')
+DATABASE_HOST = env('DATABASE_HOST')
+DATABASE_PORT = env('DATABASE_PORT') 
 
 from .email_info import *
 EMAIL_USE_TLS = EMAIL_USE_TLS
@@ -66,6 +74,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_celery_results',
 ]
 
 MIDDLEWARE = [
@@ -105,11 +114,11 @@ WSGI_APPLICATION = 'ParkingLot.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'parkinglot10',
-        'USER':'root',
-        'PASSWORD':'1234',
-        'HOST':'localhost',
-        'PORT':'3306'
+        'NAME':  DATABASE_NAME,
+        'USER': 'root',#DATABASE_USER,
+        'PASSWORD': '1234',#DATABASE_PASSWORD,
+        'HOST': 'localhost',#DATABASE_HOST,
+        'PORT': '3306'#DATABASE_PORT
     }
 }
 
@@ -153,3 +162,6 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_CACHE_BACKEND = 'django-cache'
+CELERY_TASK_ALWAYS_EAGER = True

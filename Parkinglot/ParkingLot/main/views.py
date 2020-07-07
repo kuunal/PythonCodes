@@ -14,17 +14,21 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from status_code import get_status_codes
 from .services import unpark
-
+from .tasks import send_mail_to_user_when_vehicle_is_parked
 
 class ParkingView(viewsets.ModelViewSet):
     queryset = ParkingModel.objects.all()
     serializer_class = ParkingSerializer
     lookup_field = 'vehicle_number__vehicle_number_plate'
 
+    # def get_queryset(self):
+        # return list(ParkingModel.objects.filter(vehicle_number__vehicle_number_plate=self.kwargs['pk']))
 
     def perform_create(self, serializer):
-        user = get_object_or_404(User,email="asdf@gmail.com")  
+        user = get_object_or_404(User,email="zzzaxwk@gmail.com")  
         serializer.save(driver_type=user)
+        vehicle_object = vehicle.objects.get(id=serializer.data['vehicle_number'])
+        send_mail_to_user_when_vehicle_is_parked.delay(vehicle_object.vehicle_owner_email)
      
     def destroy(self, request, *args, **kwargs):
         charges = 0
@@ -34,8 +38,8 @@ class ParkingView(viewsets.ModelViewSet):
         except Exception:
             return Response(get_status_codes(404))
         return Response({'message':'Unparked','charges':charges})
+
         
-              
 
 class VehicleTypeView(viewsets.ModelViewSet):
     queryset = VehicleTypeModel.objects.all()
@@ -48,12 +52,3 @@ class ParkingTypeView(viewsets.ModelViewSet):
 
 
 
-'''
-vehicle number, token no, in time,  driver type, parking, 
-while taking out unpark: Slot number, vehicle number,out time, as per the time calc hrs
-
-id, Parking slot(1 - 400), Vehicle number, Vehicle type(foreign from parking type), Entry 
-time, Parking type(foreign key from parking type), driver type( Foreign key from User ),
-Disabled(True/False), exit time
-
-'''
