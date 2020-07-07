@@ -14,17 +14,26 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.views.generic.list import ListView 
 from status_code import get_status_codes
-from .services import unpark
+from .services import unpark, get_current_user
 from .tasks import send_mail_to_user_when_vehicle_is_parked
-from .authenticate import Autheticate 
+# from .authenticate import Autheticate 
 from rest_framework import generics
 from rest_framework.decorators import action
+from django.shortcuts import redirect
 
-class ParkingView(viewsets.ModelViewSet):
+
+class LoginRequiredMixin(object):
+    def dispatch(self, request, *args, **kwargs):
+        redis_instance = get_redis_instance()
+        for key in redis_instance.scan_iter():
+            if key:
+                return super().dispatch(request, *args, **kwargs)
+        return redirect('login')
+
+
+class ParkingView(LoginRequiredMixin, viewsets.ModelViewSet):
     queryset = ParkingModel.objects.all()
     serializer_class = ParkingSerializer
-    permission_classes = (Autheticate,)
-    # lookup_field = 'vehicle_number__vehicle_number_plate'
 
     @action(detail=False, methods=["GET"])
     def parked(self, request, *args, **kwargs):
@@ -34,15 +43,14 @@ class ParkingView(viewsets.ModelViewSet):
     
     @action(detail=True, methods=["GET"])
     def records(self, request, pk=None):
-        print(pk)
         queryset = ParkingModel.objects.filter(vehicle_number__vehicle_number_plate=pk)
-        print(queryset)
         serializer = ParkingSerializer(queryset, many=True)
         return Response(serializer.data)
     
 
     def perform_create(self, serializer):
-        user = get_object_or_404(User,email="zzzaxwk@gmail.com")  
+        user_email = get_current_user().decode("utf-8")
+        user = get_object_or_404(User,email=user_email)  
         serializer.save(driver_type=user)
         vehicle_object = vehicle.objects.get(id=serializer.data['vehicle_number'])
         send_mail_to_user_when_vehicle_is_parked.delay(vehicle_object.vehicle_owner_email)

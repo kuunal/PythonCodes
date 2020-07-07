@@ -9,7 +9,7 @@ from django.core.exceptions import ValidationError
 from status_code import get_status_codes
 from datetime import datetime
 from vehicle.models import VehicleInformationModel as Vehicle
-
+from .services import get_current_user
 
 class ParkSerializer(serializers.ModelSerializer):
     class Meta:
@@ -30,19 +30,14 @@ class ParkingTypeSerializer(serializers.ModelSerializer):
 class ParkingSerializer(serializers.ModelSerializer):
     parking_slot = serializers.HiddenField(default=get_slot)
     entry_time = serializers.HiddenField(default=datetime.now())
-    # parking_type = ParkingTypeSerializer
-    # vehicle_type = VehicleSerializer    
     class Meta:
         model = ParkingModel    
         fields = ('parking_slot','vehicle_number', 'disabled', 'parking_type', 'vehicle_type', 'entry_time')
 
     def create(self, validated_data):
-        # data = get_initial()
-    #     # User = is_authentic(request.headers.get('x_token'))
-        user = get_object_or_404(User,email="zzzaxwk@gmail.com") 
+        user = get_object_or_404(User,email=get_current_user().decode('utf-8')) 
         vehicle_number = validated_data.get('vehicle_number').vehicle_number_plate
-        # vehicle_object = get_object_or_404(Vehicle, vehicle_number_plate=vehicle_number)
-        # validated_data['vehicle_number']=vehicle_object
+
         parking_model_instance = ParkingModel(**validated_data)
         if len(ParkingSlotModel.objects.filter(vehicle_number=vehicle_number)) > 0:
             raise ValidationError("vehicle already parked")

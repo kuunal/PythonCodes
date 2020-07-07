@@ -10,17 +10,12 @@ from register.models import RoleModel
 from . import tasks
 from ParkingLot.redis_setup import get_redis_instance
 
-
 DEFAULT_CHARGES = 15
 
-    # def is_authentic(func):
-    #     def wrapper(request, *args, **kwargs):
-    #         redis_instance = get_redis_instance()
-    #         for key in redis_instance.scan_iter():
-    #             if key == None:
-    #                 return Response(400)
-    #             func(request, *args, **kwargs)
-    #         return wrapper
+def get_current_user():
+    redis_instance = get_redis_instance()
+    for key in redis_instance.scan_iter():
+        return key
 
 def unpark(instance):
     slot_object = get_object_or_404(slot,slot_id=instance.parking_slot)

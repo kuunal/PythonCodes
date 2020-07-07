@@ -2,7 +2,6 @@ from django.urls import path
 from .views import ParkingView
 from rest_framework import routers
 from .views import ParkingView, VehicleTypeView, ParkingTypeView
-# from .views import ParkingView
 from django.urls import path, include
 from vehicle.views import VehicleView
 
