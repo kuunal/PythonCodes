@@ -30,13 +30,14 @@ class ParkingTypeSerializer(serializers.ModelSerializer):
 class ParkingSerializer(serializers.ModelSerializer):
     parking_slot = serializers.HiddenField(default=get_slot)
     entry_time = serializers.HiddenField(default=datetime.now())
-    parking_type = ParkingTypeSerializer
-    vehicle_type = VehicleSerializer    
+    # parking_type = ParkingTypeSerializer
+    # vehicle_type = VehicleSerializer    
     class Meta:
         model = ParkingModel    
         fields = ('parking_slot','vehicle_number', 'disabled', 'parking_type', 'vehicle_type', 'entry_time')
 
     def create(self, validated_data):
+        # data = get_initial()
     #     # User = is_authentic(request.headers.get('x_token'))
         user = get_object_or_404(User,email="zzzaxwk@gmail.com") 
         vehicle_number = validated_data.get('vehicle_number').vehicle_number_plate

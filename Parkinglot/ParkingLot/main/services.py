@@ -8,14 +8,19 @@ from rest_framework.response import Response
 from django.core.exceptions import ValidationError
 from register.models import RoleModel
 from . import tasks
+from ParkingLot.redis_setup import get_redis_instance
 
-# def is_authentic(token):
-#     redis_instance = get_redis_instance()
-#     for key in redis_instance.scan_iter():
-#         if redis_instance.get(key).decode('utf-8') == token:
-#             return key
-#         return False
+
 DEFAULT_CHARGES = 15
+
+    # def is_authentic(func):
+    #     def wrapper(request, *args, **kwargs):
+    #         redis_instance = get_redis_instance()
+    #         for key in redis_instance.scan_iter():
+    #             if key == None:
+    #                 return Response(400)
+    #             func(request, *args, **kwargs)
+    #         return wrapper
 
 def unpark(instance):
     slot_object = get_object_or_404(slot,slot_id=instance.parking_slot)

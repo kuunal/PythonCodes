@@ -12,17 +12,34 @@ from vehicle.models import VehicleInformationModel as vehicle
 from ParkingLot.redis_setup import get_redis_instance
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from django.views.generic.list import ListView 
 from status_code import get_status_codes
 from .services import unpark
 from .tasks import send_mail_to_user_when_vehicle_is_parked
+from .authenticate import Autheticate 
+from rest_framework import generics
+from rest_framework.decorators import action
 
 class ParkingView(viewsets.ModelViewSet):
     queryset = ParkingModel.objects.all()
     serializer_class = ParkingSerializer
-    lookup_field = 'vehicle_number__vehicle_number_plate'
+    permission_classes = (Autheticate,)
+    # lookup_field = 'vehicle_number__vehicle_number_plate'
 
-    # def get_queryset(self):
-        # return list(ParkingModel.objects.filter(vehicle_number__vehicle_number_plate=self.kwargs['pk']))
+    @action(detail=False, methods=["GET"])
+    def parked(self, request, *args, **kwargs):
+        queryset = ParkingModel.objects.filter(exit_time=None)
+        serializer = ParkingSerializer(queryset, many=True)
+        return Response(serializer.data)
+    
+    @action(detail=True, methods=["GET"])
+    def records(self, request, pk=None):
+        print(pk)
+        queryset = ParkingModel.objects.filter(vehicle_number__vehicle_number_plate=pk)
+        print(queryset)
+        serializer = ParkingSerializer(queryset, many=True)
+        return Response(serializer.data)
+    
 
     def perform_create(self, serializer):
         user = get_object_or_404(User,email="zzzaxwk@gmail.com")  
@@ -39,7 +56,7 @@ class ParkingView(viewsets.ModelViewSet):
             return Response(get_status_codes(404))
         return Response({'message':'Unparked','charges':charges})
 
-        
+  
 
 class VehicleTypeView(viewsets.ModelViewSet):
     queryset = VehicleTypeModel.objects.all()
@@ -48,6 +65,7 @@ class VehicleTypeView(viewsets.ModelViewSet):
 class ParkingTypeView(viewsets.ModelViewSet):
     queryset = ParkingTypeModel.objects.all()
     serializer_class = ParkingTypeSerializer
+
 
 
 

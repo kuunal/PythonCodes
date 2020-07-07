@@ -21,6 +21,7 @@ from .serializer_pass import ResetSerializer
 from register.send_mail import send_verification
 from register.serializer import RegisterSerializer
 from django.utils.http import urlsafe_base64_decode
+from ParkingLot.redis_setup import get_redis_instance
 from django.utils.encoding import force_text
 from django.views.decorators.csrf import csrf_exempt
 
@@ -39,11 +40,11 @@ class UserLoginViews(APIView):
         try:
             user = User.objects.get(email=email)
         except User.DoesNotExist:
-            return Response(get_status_codes(401))
+            return Response(get_status_codes(400))
         if not user.check_password(request.data['password']):
             return Response(get_status_codes(401))
         if  not user.is_active: 
-            return Response(get_status_codes(403)) 
+            return Response(get_status_codes(401)) 
         auth_token = jwt.encode({'email':email}, settings.JWT_SECRET_KEY )
         data = {
             "user": email,
@@ -81,5 +82,11 @@ class ResetPassView(APIView):
             user.save()
             return redirect('login')
         messages.warning(request, "Password should contain atleast one Capital, Symbol and number")
-        
-        
+
+
+@api_view(('GET',))
+def logout(request):
+    redis_instance = get_redis_instance()
+    for key in redis_instance.scan_iter():
+        redis_instance.delete(key)
+    return Response(get_status_codes(200))

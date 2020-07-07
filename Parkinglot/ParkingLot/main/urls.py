@@ -19,5 +19,6 @@ vehicle_router.register('park', VehicleView)
 
 urlpatterns = [
     path('park/', include(router.urls)),
-    path('register/', include(vehicle_router.urls))
+    path('register/', include(vehicle_router.urls)),
+
 ]
