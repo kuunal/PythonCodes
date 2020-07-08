@@ -23,7 +23,6 @@ def unpark(instance):
         raise ValidationError("No such vehicle parked!")
     
     total_charges = calculate_charges(instance)
-    print(total_charges)
     slot_object.vehicle_number = "null"
     slot_object.save()
     tasks.send_mail_to_user_when_vehicle_is_unparked.delay(instance.vehicle_number.vehicle_owner_email, total_charges)
@@ -35,7 +34,6 @@ def calculate_charges(instance):
     instance.exit_time = timezone.now()
     entry_time = instance.entry_time
     instance.save()
-    print(instance.exit_time, instance.entry_time)
     total_parked_time = (instance.exit_time-instance.entry_time)
     total_hours = total_parked_time.total_seconds()//(60*60)
 

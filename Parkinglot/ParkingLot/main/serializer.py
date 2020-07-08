@@ -35,7 +35,7 @@ class ParkingSerializer(serializers.ModelSerializer):
         fields = ('parking_slot','vehicle_number', 'disabled', 'parking_type', 'vehicle_type', 'entry_time')
 
     def create(self, validated_data):
-        user = get_object_or_404(User,email=get_current_user().decode('utf-8')) 
+        user = get_object_or_404(User,email=get_current_user().decode("utf-8")) 
         vehicle_number = validated_data.get('vehicle_number').vehicle_number_plate
 
         parking_model_instance = ParkingModel(**validated_data)
@@ -61,3 +61,20 @@ class ParkingSlotSerializer(serializers.ModelSerializer):
     class Meta:
         model = ParkingSlotModel
         fields = '__all__'
+
+
+class ParkingLotSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ParkingLotModel
+        fields = '__all__'
+
+    def create(self, validated_data):
+        lot_object = ""
+        if ParkingLotModel.objects.count() > 0:
+            lot_object = ParkingLotModel.objects.all()[:1].get()
+            lot_object.total_slots = validated_data.get('total_slots')
+            lot_object.total_floors = validated_data['total_floors']
+        else:
+            lot_object = ParkingLotModel(**validated_data)
+        lot_object.save()
+        return validated_data

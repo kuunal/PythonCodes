@@ -15,7 +15,7 @@ class VehicleInformationSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         if len(VehicleInformationModel.objects.filter(vehicle_number_plate=validated_data['vehicle_number_plate']))>0:
-            raise ValidationError("Vehicle already in database")
+            raise serializers.ValidationError("Vehicle already in database")
         
         vehicle =  VehicleInformationModel(**validated_data)
         vehicle.save()

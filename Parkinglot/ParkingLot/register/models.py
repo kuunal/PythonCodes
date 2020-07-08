@@ -8,7 +8,6 @@ from django.core.exceptions import ValidationError
 
 role=(
     ('driver','driver'),
-    ('police','police'),
     ('security','security'),
     ('owner','owner')
 )

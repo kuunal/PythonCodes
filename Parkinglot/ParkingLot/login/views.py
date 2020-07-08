@@ -74,7 +74,6 @@ class ResetPassView(APIView):
     def post(self, request, token, email):
         email = force_text(urlsafe_base64_decode(email))
         password=request.data['password']
-            # email = force_text(urlsafe_base64_decode(email))
         user = User.objects.get(email=email)
         serializer = ResetSerializer(user, data=request.data)
         if serializer.is_valid():   

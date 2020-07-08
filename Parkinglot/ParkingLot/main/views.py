@@ -4,12 +4,13 @@ from rest_framework import viewsets
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializer import ParkingTypeSerializer, VehicleSerializer, ParkingSerializer
+from .serializer import ParkingTypeSerializer, VehicleSerializer, ParkingSerializer, ParkingLotSerializer
 from .get_parking_slot import get_slot
 from django.http import HttpResponse
-from .models import ParkingTypeModel, VehicleTypeModel, ParkingModel, ParkingSlotModel
+from .models import ParkingTypeModel, VehicleTypeModel, ParkingModel, ParkingSlotModel, ParkingLotModel
 from vehicle.models import VehicleInformationModel as vehicle
 from ParkingLot.redis_setup import get_redis_instance
+from rest_framework.views import APIView
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.views.generic.list import ListView 
@@ -30,8 +31,14 @@ class LoginRequiredMixin(object):
                 return super().dispatch(request, *args, **kwargs)
         return redirect('login')
 
+class LotSizeRequiredMixin(object):
+    def dispatch(self, request, *args, **kwargs):
+        if ParkingLotModel.objects.count() > 0:
+            return super().dispatch(request, *args, **kwargs)
+        return redirect('lot')
 
-class ParkingView(LoginRequiredMixin, viewsets.ModelViewSet):
+
+class ParkingView(LoginRequiredMixin, LotSizeRequiredMixin, viewsets.ModelViewSet):
     queryset = ParkingModel.objects.all()
     serializer_class = ParkingSerializer
 
@@ -66,15 +73,16 @@ class ParkingView(LoginRequiredMixin, viewsets.ModelViewSet):
 
   
 
-class VehicleTypeView(viewsets.ModelViewSet):
+class VehicleTypeView(LoginRequiredMixin, viewsets.ModelViewSet):
     queryset = VehicleTypeModel.objects.all()
     serializer_class = VehicleSerializer
 
-class ParkingTypeView(viewsets.ModelViewSet):
+class ParkingTypeView(LoginRequiredMixin, viewsets.ModelViewSet):
     queryset = ParkingTypeModel.objects.all()
     serializer_class = ParkingTypeSerializer
 
+class ParkingLotView(LoginRequiredMixin, viewsets.ModelViewSet):
+    queryset = ParkingLotModel.objects.all()
+    serializer_class = ParkingLotSerializer
 
-
-
-
+    

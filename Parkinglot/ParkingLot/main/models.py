@@ -58,8 +58,9 @@ class ParkingSlotModel(models.Model):
         return f'{self.slot_id} {self.vehicle_number} '
 
 class ParkingLotModel(models.Model):
-    slot_id= models.ForeignKey(ParkingSlotModel,default=None, on_delete=models.DO_NOTHING)
-    parking_type= models.ForeignKey(ParkingTypeModel, on_delete=models.DO_NOTHING)
-    driver= models.CharField(max_length= 100, choices= driver_type)
+    total_slots = models.IntegerField()
+    total_floors = models.IntegerField()
+    slots_in_floor = models.CharField(max_length=100, null=True)
+
 
             
