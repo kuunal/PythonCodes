@@ -22,5 +22,5 @@ lot.register('', ParkingLotView)
 urlpatterns = [
     path('park/', include(router.urls)),
     path('register/', include(vehicle_router.urls)),
-    path('', include(lot.urls), name=lot)     
+    path('', include(lot.urls), name="lot")     
 ]

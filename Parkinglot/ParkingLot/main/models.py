@@ -3,17 +3,7 @@ from register.models import  RoleModel
 from django.contrib.auth.models import User
 from datetime import datetime
 from vehicle.models import VehicleInformationModel as vehicle
-
-vehicle_type= (
-    ('car','car'),
-    ('bike','bike')
-)
-class VehicleTypeModel(models.Model):
-    vehicle_type = models.CharField(max_length=100, choices= vehicle_type)
-    charge = models.IntegerField()
-    
-    def __str__(self):
-        return self.vehicle_type
+from vehicle.models import VehicleTypeModel
 
 parking_type=(
     ('own','own' ),
@@ -29,7 +19,6 @@ class ParkingTypeModel(models.Model):
 class ParkingModel(models.Model):
     parking_slot = models.IntegerField(null= False)
     vehicle_number = models.ForeignKey(vehicle,on_delete=models.CASCADE)
-    vehicle_type = models.ForeignKey(VehicleTypeModel, on_delete=models.DO_NOTHING)
     entry_time = models.DateTimeField(auto_now=False, auto_now_add=False, blank=True)
     parking_type = models.ForeignKey(ParkingTypeModel, on_delete=models.DO_NOTHING)
     driver_type = models.ForeignKey(User, default=None, on_delete=models.DO_NOTHING)

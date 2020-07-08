@@ -9,6 +9,7 @@ from django.core.exceptions import ValidationError
 from register.models import RoleModel
 from . import tasks
 from ParkingLot.redis_setup import get_redis_instance
+from vehicle.models import VehicleInformationModel as Vehicle
 
 DEFAULT_CHARGES = 15
 
@@ -21,16 +22,16 @@ def unpark(instance):
     slot_object = get_object_or_404(slot,slot_id=instance.parking_slot)
     if slot_object.vehicle_number == "null" :
         raise ValidationError("No such vehicle parked!")
-    
-    total_charges = calculate_charges(instance)
+    vehicle_number = slot_object.vehicle_number
+    total_charges = calculate_charges(instance, vehicle_number)
     slot_object.vehicle_number = "null"
     slot_object.save()
     tasks.send_mail_to_user_when_vehicle_is_unparked.delay(instance.vehicle_number.vehicle_owner_email, total_charges)
     return total_charges
 
-def calculate_charges(instance):
+def calculate_charges(instance, vehicle_number):
     parking_type_charge = instance.parking_type.charge
-    vehicle_type_charge = instance.vehicle_type.charge
+    vehicle_type_charge = Vehicle.objects.get(vehicle_number_plate=vehicle_number).vehicle_type.charge
     instance.exit_time = timezone.now()
     entry_time = instance.entry_time
     instance.save()

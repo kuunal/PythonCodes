@@ -32,7 +32,7 @@ class ParkingSerializer(serializers.ModelSerializer):
     entry_time = serializers.HiddenField(default=datetime.now())
     class Meta:
         model = ParkingModel    
-        fields = ('parking_slot','vehicle_number', 'disabled', 'parking_type', 'vehicle_type', 'entry_time')
+        fields = ('parking_slot','vehicle_number', 'disabled', 'parking_type', 'entry_time')
 
     def create(self, validated_data):
         user = get_object_or_404(User,email=get_current_user().decode("utf-8")) 
