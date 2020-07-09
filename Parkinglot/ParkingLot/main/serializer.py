@@ -33,6 +33,7 @@ class ParkingSerializer(serializers.ModelSerializer):
     class Meta:
         model = ParkingModel    
         fields = ('parking_slot','vehicle_number', 'disabled', 'parking_type', 'entry_time')
+        depth = 1
 
     def create(self, validated_data):
         user = get_object_or_404(User,email=get_current_user().decode("utf-8")) 
@@ -68,6 +69,7 @@ class ParkingLotSerializer(serializers.ModelSerializer):
         model = ParkingLotModel
         fields = '__all__'
 
+
     def create(self, validated_data):
         lot_object = ""
         if ParkingLotModel.objects.count() > 0:
@@ -78,3 +80,10 @@ class ParkingLotSerializer(serializers.ModelSerializer):
             lot_object = ParkingLotModel(**validated_data)
         lot_object.save()
         return validated_data
+
+
+# class ParkingFilter(django_filters.FilterSet):
+#     class Meta:
+#         model = ParkingSlotModel
+#         fields = '__all__'
+#         depth = 1

@@ -4,7 +4,7 @@ from rest_framework import viewsets
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializer import ParkingTypeSerializer, VehicleSerializer, ParkingSerializer, ParkingLotSerializer
+from .serializer import ParkingTypeSerializer, VehicleSerializer, ParkingSerializer, ParkingLotSerializer#, ParkingFilter
 from .get_parking_slot import get_slot
 from django.http import HttpResponse
 from .models import ParkingTypeModel, VehicleTypeModel, ParkingModel, ParkingSlotModel, ParkingLotModel
@@ -21,7 +21,7 @@ from .tasks import send_mail_to_user_when_vehicle_is_parked
 from rest_framework import generics
 from rest_framework.decorators import action
 from django.shortcuts import redirect
-
+from django_filters.rest_framework import DjangoFilterBackend
 
 class LoginRequiredMixin(object):
     def dispatch(self, request, *args, **kwargs):
@@ -38,19 +38,16 @@ class LotSizeRequiredMixin(object):
         return redirect('lot')
 
 
+
 class ParkingView(LoginRequiredMixin, LotSizeRequiredMixin, viewsets.ModelViewSet):
     queryset = ParkingModel.objects.all()
     serializer_class = ParkingSerializer
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = '__all__'
 
     @action(detail=False, methods=["GET"])
     def parked(self, request, *args, **kwargs):
         queryset = ParkingModel.objects.filter(exit_time=None)
-        serializer = ParkingSerializer(queryset, many=True)
-        return Response(serializer.data)
-    
-    @action(detail=True, methods=["GET"])
-    def records(self, request, pk=None):
-        queryset = ParkingModel.objects.filter(vehicle_number__vehicle_number_plate=pk)
         serializer = ParkingSerializer(queryset, many=True)
         return Response(serializer.data)
     
@@ -85,4 +82,9 @@ class ParkingLotView(LoginRequiredMixin, viewsets.ModelViewSet):
     queryset = ParkingLotModel.objects.all()
     serializer_class = ParkingLotSerializer
 
+# class ParkingSearchView(LoginRequiredMixin, APIView):
+#     serializer_class = ParkingFilter
+#     def post(self, request):
+#         info = ParkingSlotModel.objects.all()
+#         info_filter = 
     
