@@ -78,3 +78,10 @@ class ParkingLotSerializer(serializers.ModelSerializer):
             lot_object = ParkingLotModel(**validated_data)
         lot_object.save()
         return validated_data
+
+
+# class ParkingFilter(django_filters.FilterSet):
+#     class Meta:
+#         model = ParkingSlotModel
+#         fields = '__all__'
+#         depth = 1

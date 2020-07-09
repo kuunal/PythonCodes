@@ -13,12 +13,18 @@ from django.contrib.auth.models import User
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.utils.encoding import force_bytes, force_text
 from Tools.scripts import generate_token
+from rest_framework.generics import GenericAPIView
+from rest_framework.mixins import ListModelMixin
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 # from .send_mail import send_verification
 from status_code import get_status_codes
 from ParkingLot.redis_setup import get_redis_instance
 from .serializer import RegisterSerializer, RoleSerializer
 from main.tasks import send_verification_to_user
+from .models import RoleModel
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.generics import ListAPIView
+from main.views import LoginRequiredMixin
 
 class RegisterViews(APIView):
 
@@ -51,3 +57,10 @@ def check_login(request):
         return Response(302)
     return Response(200)
 
+class RegisterListView(LoginRequiredMixin, ListAPIView):
+    queryset = RoleModel.objects.all()
+    serializer_class = RoleSerializer
+    filter_backends = (DjangoFilterBackend, )
+    filter_fields = '__all__'
+    
+    

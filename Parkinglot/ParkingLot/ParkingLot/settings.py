@@ -68,6 +68,7 @@ INSTALLED_APPS = [
     'main',
     'login',
     'vehicle',
+    'django_filters',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

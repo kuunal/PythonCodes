@@ -52,11 +52,11 @@ class RegisterSerializer(serializers.ModelSerializer):
 
 
 class RoleSerializer(serializers.ModelSerializer):
-    user = RegisterSerializer()
+    # user = RegisterSerializer()
     class Meta:
         model = RoleModel
         fields = ('role', 'user') 
-
+        depth = 1
     
 
         
