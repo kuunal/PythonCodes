@@ -68,7 +68,13 @@ class ParkingView(LoginRequiredMixin, LotSizeRequiredMixin, viewsets.ModelViewSe
             return Response(get_status_codes(404))
         return Response({'message':'Unparked','charges':charges})
 
-  
+
+class SearchParkingView():
+    queryset = ParkingModel.objects.all()
+    serializer_class = ParkingSerializer
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = '__all__'
+
 
 class VehicleTypeView(LoginRequiredMixin, viewsets.ModelViewSet):
     queryset = VehicleTypeModel.objects.all()
@@ -82,9 +88,3 @@ class ParkingLotView(LoginRequiredMixin, viewsets.ModelViewSet):
     queryset = ParkingLotModel.objects.all()
     serializer_class = ParkingLotSerializer
 
-# class ParkingSearchView(LoginRequiredMixin, APIView):
-#     serializer_class = ParkingFilter
-#     def post(self, request):
-#         info = ParkingSlotModel.objects.all()
-#         info_filter = 
-    

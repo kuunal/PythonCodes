@@ -163,6 +163,7 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
-CELERY_RESULT_BACKEND = 'django-db'
+os.environ.setdefault('FORKED_BY_MULTIPROCESSING', '1')
+CELERY_RESULT_BACKEND = "django-db"
 CELERY_CACHE_BACKEND = 'django-cache'
-CELERY_TASK_ALWAYS_EAGER = True
+# CELERY_TASK_ALWAYS_EAGER = True

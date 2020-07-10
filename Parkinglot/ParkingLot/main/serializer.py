@@ -33,7 +33,7 @@ class ParkingSerializer(serializers.ModelSerializer):
     class Meta:
         model = ParkingModel    
         fields = ('parking_slot','vehicle_number', 'disabled', 'parking_type', 'entry_time')
-        depth = 1
+        # depth = 1
 
     def create(self, validated_data):
         user = get_object_or_404(User,email=get_current_user().decode("utf-8")) 
