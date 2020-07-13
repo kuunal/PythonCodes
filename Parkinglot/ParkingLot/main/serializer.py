@@ -10,49 +10,49 @@ from status_code import get_status_codes
 from datetime import datetime
 from vehicle.models import VehicleInformationModel as Vehicle
 from .services import get_current_user
+from vehicle.serializer import VehicleInformationSerializer
 
 class ParkSerializer(serializers.ModelSerializer):
     class Meta:
         model = ParkingModel
         fields = '__all__'
 
-class VehicleSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = VehicleTypeModel
-        fields = ['vehicle_type', 'charge']
+
 
 class ParkingTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = ParkingTypeModel
         fields = ('parking_type', 'charge')
 
+class ParkingTypeSerializer1(serializers.ModelSerializer):
+    class Meta:
+        model = ParkingTypeModel
+        fields = ('parking_type', 'charge')
+        read_only_fields = ('charge',)
 
 class ParkingSerializer(serializers.ModelSerializer):
-    parking_slot = serializers.HiddenField(default=get_slot)
-    entry_time = serializers.HiddenField(default=datetime.now())
+    parking_slot = serializers.CharField(default=get_slot)
+    entry_time = serializers.CharField(default=datetime.now())
+    parking_type = ParkingTypeSerializer1(read_only=True)
+    vehicle_number =  VehicleInformationSerializer(read_only=True)
     class Meta:
         model = ParkingModel    
-        fields = ('parking_slot','vehicle_number', 'disabled', 'parking_type', 'entry_time')
-        # depth = 1
-
+        fields = ('parking_slot','vehicle_number', 'disabled', 'parking_type', 'entry_time', 'exit_time')
+        read_only_fields = ('entry_time', 'parking_slot')
+        
     def create(self, validated_data):
-        user = get_object_or_404(User,email=get_current_user().decode("utf-8")) 
-        vehicle_number = validated_data.get('vehicle_number').vehicle_number_plate
-
+        user = get_object_or_404(User,email=get_current_user()) 
+        vehicle_number = validated_data.get('vehicle_number')
         parking_model_instance = ParkingModel(**validated_data)
         if len(ParkingSlotModel.objects.filter(vehicle_number=vehicle_number)) > 0:
             raise ValidationError("vehicle already parked")
             return
-        park_vehicle = ParkingSlotModel.objects.filter(vehicle_number="null").first()
+        park_vehicle = ParkingSlotModel.objects.filter(vehicle_number=None).first()
         if park_vehicle:
-            slot_id=get_slot()
+            park_vehicle.slot_id=get_slot()
             park_vehicle.vehicle_number = vehicle_number
-            park_vehicle.driver = user
-            parking_type=validated_data.get('parking_type')
         else:
             park_vehicle = ParkingSlotModel.objects.create(slot_id=get_slot(),
-                                                    driver=user,
-                                                    parking_type=validated_data.get('parking_type'),
                                                     vehicle_number=vehicle_number)
         park_vehicle.save()
         parking_model_instance.save()
@@ -82,8 +82,3 @@ class ParkingLotSerializer(serializers.ModelSerializer):
         return validated_data
 
 
-# class ParkingFilter(django_filters.FilterSet):
-#     class Meta:
-#         model = ParkingSlotModel
-#         fields = '__all__'
-#         depth = 1

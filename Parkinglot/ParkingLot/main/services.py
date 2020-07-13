@@ -16,7 +16,7 @@ DEFAULT_CHARGES = 15
 def get_current_user():
     redis_instance = get_redis_instance()
     for key in redis_instance.scan_iter():
-        return key
+        return key.decode('utf-8')
 
 def unpark(instance):
     slot_object = get_object_or_404(slot,slot_id=instance.parking_slot)
@@ -24,7 +24,7 @@ def unpark(instance):
         raise ValidationError("No such vehicle parked!")
     vehicle_number = slot_object.vehicle_number
     total_charges = calculate_charges(instance, vehicle_number)
-    slot_object.vehicle_number = "null"
+    slot_object.vehicle_number = None
     slot_object.save()
     tasks.send_mail_to_user_when_vehicle_is_unparked.delay(instance.vehicle_number.vehicle_owner_email, total_charges)
     return total_charges
@@ -40,5 +40,4 @@ def calculate_charges(instance, vehicle_number):
 
     if total_hours > 1 :
         total_hours*2
-
     return DEFAULT_CHARGES + vehicle_type_charge + parking_type_charge + total_hours + get_object_or_404(RoleModel, user=instance.driver_type).charge

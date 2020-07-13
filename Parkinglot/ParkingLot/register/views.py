@@ -25,6 +25,7 @@ from .models import RoleModel
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.generics import ListAPIView
 from main.views import LoginRequiredMixin
+import jwt
 
 class RegisterViews(APIView):
 
@@ -40,13 +41,15 @@ class RegisterViews(APIView):
         return Response(serializer.errors)
     
     
-def verify_user(request, token, email):
-    email = force_text(urlsafe_base64_decode(token))
-    user = User.objects.get(email=email)
-    if user.is_active == True:
-        return Response(get_status_codes(400))
-    user.is_active = True
-    user.save()
+def verify_user(request, token):
+    # token = jwt.decode(token)
+    # email = token['email']
+    # print(email)
+    # user = User.objects.get(email=email)
+    # if user.is_active == True:
+    #     return Response(get_status_codes(400))
+    # user.is_active = True
+    # user.save()
     return redirect('login')
 
 @api_view(('GET',))

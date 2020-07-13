@@ -6,12 +6,13 @@ from django.utils.encoding import force_bytes
 from ParkingLot import settings
 from django.core.mail import send_mail
 from django.contrib.auth.models import User
+import datetime
+from _datetime import timedelta
 
 
 
 def send_verification(user_email, subject, message, host=settings.HOST):
     user = User.objects.filter(email=user_email)
-    auth_token = jwt.encode({'email':user_email}, settings.JWT_SECRET_KEY )
     subject = subject
     message = message
     html_message = render_to_string('register/activate.html',{

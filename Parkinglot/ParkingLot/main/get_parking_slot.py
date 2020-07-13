@@ -10,7 +10,7 @@ def get_slot():
     total_floor = lot.objects.all().values_list('total_floors')[0][0]
     slot_per_floor = total_slot//total_floor
     slot_per_floor_list = get_slot_list(total_slot, total_floor)
-    unparked_slot = slot.objects.filter(vehicle_number="null").first()
+    unparked_slot = slot.objects.filter(vehicle_number=None).first()
     initialized_slots = slot.objects.count()
     if unparked_slot == None and initialized_slots == 0:
         return 1
@@ -27,7 +27,6 @@ def get_slot():
 
 def send_mail_to_floor(unparked_slot, slot_per_floor_list, slot_per_floor):
     floor = [ str(slot_per_floor_list.index(slot)) for slot in slot_per_floor_list if (unparked_slot.id + 1) % slot_per_floor == 0 and (unparked_slot.id + 1) > slot]
-    print(floor,"sadasdasdasdasdasdasdasdasdasd")
     if len(floor) > 0:
         floors_full = ","
         floors_full = floors_full.join(floor)

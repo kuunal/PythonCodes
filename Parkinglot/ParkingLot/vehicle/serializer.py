@@ -1,22 +1,30 @@
 from rest_framework import serializers
 from .models import VehicleInformationModel
 from django.core.exceptions import ValidationError
+from .models import VehicleTypeModel
+
+class VehicleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VehicleTypeModel
+        fields = ['vehicle_type', 'charge']
+        
+
+class VehicleSerializer1(serializers.ModelSerializer):
+    class Meta:
+        model = VehicleTypeModel
+        fields = ['vehicle_type', 'charge']
+        read_only_fields = ('charge',)
 
 
 class VehicleInformationSerializer(serializers.ModelSerializer):
+    vehicle_type = VehicleSerializer1(read_only=True)
     class Meta:
         model =  VehicleInformationModel
-        fields = '__all__'
+        fields = ['color','vehicle_number_plate' ,'brand','vehicle_owner', 'vehicle_owner_email', 'vehicle_type'] #'__all__'
+     
 
     def validate_color(self, value):
         if any(char.isdigit() for char in value): 
             raise ValidationError("Please provide proper color!")
         return value
 
-    def create(self, validated_data):
-        if len(VehicleInformationModel.objects.filter(vehicle_number_plate=validated_data['vehicle_number_plate']))>0:
-            raise serializers.ValidationError("Vehicle already in database")
-        
-        vehicle =  VehicleInformationModel(**validated_data)
-        vehicle.save()
-        return vehicle

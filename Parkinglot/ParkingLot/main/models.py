@@ -39,9 +39,7 @@ driver_type=(
 
 class ParkingSlotModel(models.Model):
     slot_id = models.IntegerField()
-    driver= models.ForeignKey(User, on_delete=models.DO_NOTHING)
-    parking_type= models.ForeignKey(ParkingTypeModel, on_delete=models.CASCADE) 
-    vehicle_number = models.CharField(max_length=10, null=False)
+    vehicle_number = models.ForeignKey(vehicle, on_delete=models.DO_NOTHING, null=True)
 
     def __str__(self):
         return f'{self.slot_id} {self.vehicle_number} '
