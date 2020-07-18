@@ -12,10 +12,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 import environ
-# import django
-# os.environ.setdefault("DJANGO_SETTINGS_MODULE", __file__)
 
-# django.setup()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -51,7 +48,7 @@ EMAIL_PORT = EMAIL_PORT
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('DJANGO_SECRET_KEY')
+SECRET_KEY = '_w@(2%qahsb4*(r7$jw3^yba9zqqm*2y9b^#7&yzn-lmm9&%x0'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -79,7 +76,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    # 'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -156,18 +153,10 @@ USE_L10N = True
 USE_TZ = False  
 
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
-os.environ.setdefault('FORKED_BY_MULTIPROCESSING', '1')
-CELERY_RESULT_BACKEND = "django-db"
+CELERY_RESULT_BACKEND = 'django-db'
 CELERY_CACHE_BACKEND = 'django-cache'
-
-# CELERY_TASK_ALWAYS_EAGER = True
-
-from _datetime import timedelta
-SIMPLE_JWT = {
-     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5)
- }
+CELERY_TASK_ALWAYS_EAGER = True

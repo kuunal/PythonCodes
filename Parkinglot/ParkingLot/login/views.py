@@ -12,7 +12,6 @@ from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.models import User
 from rest_framework.response import Response
 from rest_framework.views import APIView
-# from django.contrib import auth
 from rest_framework import status
 from status_code import get_status_codes
 from ParkingLot import settings

@@ -11,6 +11,7 @@ from datetime import datetime
 from vehicle.models import VehicleInformationModel as Vehicle
 from .services import get_current_user
 from vehicle.serializer import VehicleInformationSerializer
+from register.models import RoleModel
 
 class ParkSerializer(serializers.ModelSerializer):
     class Meta:
@@ -24,29 +25,38 @@ class ParkingTypeSerializer(serializers.ModelSerializer):
         model = ParkingTypeModel
         fields = ('parking_type', 'charge')
 
-class ParkingTypeSerializer1(serializers.ModelSerializer):
+class ParkingTypeSerializerForParkingSerializer(serializers.ModelSerializer):
     class Meta:
         model = ParkingTypeModel
         fields = ('parking_type', 'charge')
         read_only_fields = ('charge',)
 
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('username', 'email', )
+
+
 class ParkingSerializer(serializers.ModelSerializer):
     parking_slot = serializers.CharField(default=get_slot)
     entry_time = serializers.CharField(default=datetime.now())
-    parking_type = ParkingTypeSerializer1(read_only=True)
+    parking_type = ParkingTypeSerializerForParkingSerializer(read_only=True)
     vehicle_number =  VehicleInformationSerializer(read_only=True)
+    driver_type = UserSerializer(read_only=True)
     class Meta:
         model = ParkingModel    
-        fields = ('parking_slot','vehicle_number', 'disabled', 'parking_type', 'entry_time', 'exit_time')
-        read_only_fields = ('entry_time', 'parking_slot')
-        
+        fields = ('parking_slot','vehicle_number', 'disabled', 'parking_type', 'entry_time', 'exit_time', 'driver_type')
+        read_only_fields = ('entry_time', 'parking_slot', 'driver_type')
+        depth = 3
+
+
+
     def create(self, validated_data):
-        user = get_object_or_404(User,email=get_current_user()) 
         vehicle_number = validated_data.get('vehicle_number')
         parking_model_instance = ParkingModel(**validated_data)
         if len(ParkingSlotModel.objects.filter(vehicle_number=vehicle_number)) > 0:
-            raise ValidationError("vehicle already parked")
-            return
+            raise serializers.ValidationError("vehicle already parked")
         park_vehicle = ParkingSlotModel.objects.filter(vehicle_number=None).first()
         if park_vehicle:
             park_vehicle.slot_id=get_slot()
@@ -62,6 +72,7 @@ class ParkingSlotSerializer(serializers.ModelSerializer):
     class Meta:
         model = ParkingSlotModel
         fields = '__all__'
+        depth = 3
 
 
 class ParkingLotSerializer(serializers.ModelSerializer):

@@ -3,7 +3,6 @@ from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from .serializer import RegisterSerializer
 from django.http import JsonResponse
-# from .models import RegisterModel
 from rest_framework.response import Response
 from rest_framework import status
 from ParkingLot import settings
@@ -16,7 +15,6 @@ from Tools.scripts import generate_token
 from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import ListModelMixin
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
-# from .send_mail import send_verification
 from status_code import get_status_codes
 from ParkingLot.redis_setup import get_redis_instance
 from .serializer import RegisterSerializer, RoleSerializer
@@ -25,7 +23,6 @@ from .models import RoleModel
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.generics import ListAPIView
 from main.views import LoginRequiredMixin
-import jwt
 
 class RegisterViews(APIView):
 
@@ -41,13 +38,14 @@ class RegisterViews(APIView):
         return Response(serializer.errors)
     
     
-def verify_user(request, token):
-    id = force_text(urlsafe_base64_decode(token))
-    user = User.objects.get(email=id)
+def verify_user(request, token, email):
+    email = force_text(urlsafe_base64_decode(token))
+    user = User.objects.get(email=email)
+    if user.is_active == True:
+        return Response(get_status_codes(400))
     user.is_active = True
     user.save()
     return redirect('login')
-
 
 @api_view(('GET',))
 def check_login(request):

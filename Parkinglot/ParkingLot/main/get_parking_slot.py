@@ -23,7 +23,6 @@ def get_slot():
     else:
         send_mail_to_floor(slot.objects.latest('id') , slot_per_floor_list, slot_per_floor)
         return slot.objects.latest('id').id + 1  
-        # pass
 
 def send_mail_to_floor(unparked_slot, slot_per_floor_list, slot_per_floor):
     floor = [ str(slot_per_floor_list.index(slot)) for slot in slot_per_floor_list if (unparked_slot.id + 1) % slot_per_floor == 0 and (unparked_slot.id + 1) > slot]

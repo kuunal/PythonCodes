@@ -4,7 +4,6 @@ from django.contrib.auth.models import User, AbstractBaseUser, AbstractUser, Bas
 from django.core.validators import RegexValidator
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
-# User = get_user_model()
 
 role=(
     ('driver','driver'),
@@ -18,5 +17,3 @@ class RoleModel(models.Model):
 
     def __str__(self):
         return f'{self.user.username} is {self.role}'
-
-
