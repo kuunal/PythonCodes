@@ -4,7 +4,7 @@ ENV PYTHONUNBUFFERED = 1
 RUN mkdir /app
 WORKDIR /app
 ADD . /app/
-RUN pip install -r Pipfile
+RUN pipenv install -r Pipfile
 
 # RUN sudo apt install python3 mysql-server
 
