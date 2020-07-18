@@ -22,7 +22,7 @@ from main.tasks import send_verification_to_user
 from .models import RoleModel
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.generics import ListAPIView
-from main.views import LoginRequiredMixin
+from main.views import LoginRequiredMixin, DriverPermissions
 
 class RegisterViews(APIView):
 
@@ -60,5 +60,6 @@ class RegisterListView(LoginRequiredMixin, ListAPIView):
     serializer_class = RoleSerializer
     filter_backends = (DjangoFilterBackend, )
     filter_fields = '__all__'
+    permission_classes = (DriverPermissions,)
     
     

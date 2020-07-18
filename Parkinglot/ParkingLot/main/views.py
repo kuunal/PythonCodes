@@ -15,6 +15,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.views.generic.list import ListView 
 from status_code import get_status_codes
+from rest_framework.permissions import BasePermission
 from .services import unpark, get_current_user
 from .tasks import send_mail_to_user_when_vehicle_is_parked
 # from .authenticate import Autheticate 
@@ -38,11 +39,23 @@ class LotSizeRequiredMixin(object):
         return redirect('lot')
 
 
+class DriverPermissions(BasePermission):
+    def has_permission(self, request, view):
+        role = RoleModel.objects.get(user__email = get_current_user()).role
+        if role.lower() == "driver" :
+            print(request.method)
+            if request.method == "POST" or request.method == "DELETE":
+                return True
+            return False   
+        return True
+
 class ParkingView(LoginRequiredMixin, LotSizeRequiredMixin, viewsets.ModelViewSet):
     queryset = ParkingModel.objects.all()
     serializer_class = ParkingSerializer
     filter_backends = (DjangoFilterBackend,)
+    permission_classes = (DriverPermissions,)
     filter_fields = '__all__'
+
     
 
     def perform_create(self, serializer):
