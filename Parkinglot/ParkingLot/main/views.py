@@ -4,13 +4,14 @@ from rest_framework import viewsets
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializer import ParkingTypeSerializer, VehicleSerializer, ParkingSerializer, ParkingLotSerializer#, ParkingFilter
+from .serializer import ParkingTypeSerializer, ParkingSerializer, ParkingLotSerializer
 from .get_parking_slot import get_slot
 from django.http import HttpResponse
 from .models import ParkingTypeModel, VehicleTypeModel, ParkingModel, ParkingSlotModel, ParkingLotModel
 from vehicle.models import VehicleInformationModel as vehicle
 from ParkingLot.redis_setup import get_redis_instance
 from rest_framework.views import APIView
+from vehicle.serializer import VehicleSerializer
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.views.generic.list import ListView 
