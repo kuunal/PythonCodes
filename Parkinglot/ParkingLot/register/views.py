@@ -26,6 +26,8 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.generics import ListAPIView
 from main.views import LoginRequiredMixin
 import jwt
+from main.views import DriverPermissions
+
 
 class RegisterViews(APIView):
 
@@ -42,14 +44,10 @@ class RegisterViews(APIView):
     
     
 def verify_user(request, token):
-    # token = jwt.decode(token)
-    # email = token['email']
-    # print(email)
-    # user = User.objects.get(email=email)
-    # if user.is_active == True:
-    #     return Response(get_status_codes(400))
-    # user.is_active = True
-    # user.save()
+    id = force_text(urlsafe_base64_decode(token))
+    user = User.objects.get(email=id)
+    user.is_active = True
+    user.save()
     return redirect('login')
 
 @api_view(('GET',))
@@ -63,6 +61,7 @@ def check_login(request):
 class RegisterListView(LoginRequiredMixin, ListAPIView):
     queryset = RoleModel.objects.all()
     serializer_class = RoleSerializer
+    permission_classes = (DriverPermissions,)    
     filter_backends = (DjangoFilterBackend, )
     filter_fields = '__all__'
     

@@ -47,7 +47,6 @@ class ParkingSlotModel(models.Model):
 class ParkingLotModel(models.Model):
     total_slots = models.IntegerField()
     total_floors = models.IntegerField()
-    slots_in_floor = models.CharField(max_length=100, null=True)
 
 
             

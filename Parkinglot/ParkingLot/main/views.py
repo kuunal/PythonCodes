@@ -27,48 +27,59 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication 
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
+from main.serializer import ParkingSlotSerializer
 
 
-class LoginRequiredMixin(object):
+class LoginRequiredMixin():
     def dispatch(self, request, *args, **kwargs):
-        if get_current_user():
+        if get_current_user(request):
             return super().dispatch(request, *args, **kwargs)
         return redirect('login')
 
-class LotSizeRequiredMixin(object):
+class LotSizeRequiredMixin():
     def dispatch(self, request, *args, **kwargs):
         if ParkingLotModel.objects.count() > 0:
             return super().dispatch(request, *args, **kwargs)
-        return redirect('lot')
+        return redirect('/lot')
 
 class DriverPermissions(BasePermission):
     def has_permission(self, request, view):
-        role = RoleModel.objects.get(user__email = get_current_user()).role
-        if role.lower() == "driver" :
-            print(request.method)
-            if request.method == "POST" or request.method == "DELETE":
-                return True
-            return False   
-        return True
+        try:
+            role = RoleModel.objects.get(user__email = get_current_user(request)).role
+        except RoleModel.DoesNotExist:
+            return Response(get_status_codes(401))
+        else:
+            if role.lower() == "driver" : 
+                if request.method == "POST" or request.method == "DELETE":
+                    return True
+                return False
+            return True
 
 class ParkingView(LoginRequiredMixin, LotSizeRequiredMixin, viewsets.ModelViewSet):
     queryset = ParkingModel.objects.all()
     serializer_class = ParkingSerializer
     filter_backends = (DjangoFilterBackend,)
     filter_fields = '__all__'
+    permission_classes = (DriverPermissions,)
+
+    @action(detail=True, methods=["GET"])
+    def records(self, request, pk=None):
+        queryset = ParkingModel.objects.filter(vehicle_number__vehicle_number_plate=pk)
+        serializer = ParkingSerializer(queryset, many=True)
+        return Response(serializer.data)
 
     @action(detail=False, methods=["GET"])
-    def parked(self, request, *args, **kwargs):
+    def parked(self, request, *args, **kwargs):        
         queryset = ParkingModel.objects.filter(exit_time=None)
         serializer = ParkingSerializer(queryset, many=True)
         return Response(serializer.data)
     
     def create(self, request):
-        user_email = get_current_user()
+        user_email = get_current_user(request)
         try:
             user = User.objects.get(email=user_email)
         except User.DoesNotExist:
-            return Response({'status':400,'message':'Something went wrong'})
+            return Response({'status':400,'message':'Admin is not available'})
         vehicle_number = request.data.get('vehicle_number')
         parking_type = request.data.get('parking_type')
         vehicle_object = vehicle.objects.get(vehicle_number_plate = vehicle_number)
@@ -87,15 +98,9 @@ class ParkingView(LoginRequiredMixin, LotSizeRequiredMixin, viewsets.ModelViewSe
             instance = self.get_object()
             charges = unpark(instance)
         except Exception:
-            return Response(get_status_codes(404))
+            return Response({'status':400,'message':'No such vehicle parked'})
         return Response({'message':'Unparked','charges':charges})
 
-
-class SearchParkingView():
-    queryset = ParkingModel.objects.all()
-    serializer_class = ParkingSerializer
-    filter_backends = (DjangoFilterBackend,)
-    filter_fields = '__all__'
 
 
 class VehicleTypeView(LoginRequiredMixin, viewsets.ModelViewSet):
@@ -109,12 +114,4 @@ class ParkingTypeView(LoginRequiredMixin, viewsets.ModelViewSet):
 class ParkingLotView(LoginRequiredMixin, viewsets.ModelViewSet):
     queryset = ParkingLotModel.objects.all()
     serializer_class = ParkingLotSerializer
-    
-class ParkingSlotView(LoginRequiredMixin, viewsets.ModelViewSet):
-    queryset = ParkingLotModel.objects.all()
-    serializer_class = ParkingLotSerializer
-        
-
-
-
 

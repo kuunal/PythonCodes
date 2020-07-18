@@ -86,6 +86,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 'ParkingLot.login_middleware.LoginMiddleWare',
 ]
 
 ROOT_URLCONF = 'ParkingLot.urls'
@@ -168,9 +169,9 @@ os.environ.setdefault('FORKED_BY_MULTIPROCESSING', '1')
 CELERY_RESULT_BACKEND = "django-db"
 CELERY_CACHE_BACKEND = 'django-cache'
 
-# CELERY_TASK_ALWAYS_EAGER = True
 
-from _datetime import timedelta
-SIMPLE_JWT = {
-     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5)
- }
+
+LOGIN_EXEMPT_URLS = (
+    r'^/register/$',
+    r'^/login/$'
+)

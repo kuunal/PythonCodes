@@ -1,3 +1,4 @@
+import jwt
 from django.shortcuts import get_object_or_404
 from .models import ParkingSlotModel as slot
 from .models import ParkingTypeModel
@@ -10,13 +11,23 @@ from register.models import RoleModel
 from . import tasks
 from ParkingLot.redis_setup import get_redis_instance
 from vehicle.models import VehicleInformationModel as Vehicle
+from .jwt_decode import jwt_decode
+from rest_framework import exceptions
 
 DEFAULT_CHARGES = 15
 
-def get_current_user():
+def get_current_user(request):
     redis_instance = get_redis_instance()
-    for key in redis_instance.scan_iter():
-        return key.decode('utf-8')
+    token = request.headers.get("x_token")
+    try:
+        email = jwt_decode(token)
+    except exceptions.AuthenticationFailed as e:
+        return False
+    else:
+        for key in redis_instance.scan_iter():
+            if key.decode('utf-8') == email:   
+                return key.decode('utf-8')
+        return False
 
 def unpark(instance):
     slot_object = get_object_or_404(slot,slot_id=instance.parking_slot)
