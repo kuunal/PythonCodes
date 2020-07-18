@@ -51,16 +51,13 @@ EMAIL_PORT = EMAIL_PORT
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '_w@(2%qahsb4*(r7$jw3^yba9zqqm*2y9b^#7&yzn-lmm9&%x0'
+SECRET_KEY = env('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
-# AUTH_USER_MODEL = 'register.User'
-# Application definition
 
 INSTALLED_APPS = [
     'register',

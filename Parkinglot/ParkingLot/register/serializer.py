@@ -48,9 +48,6 @@ class RegisterSerializer(serializers.ModelSerializer):
         return registered_user
 
 
-
-
-
 class RoleSerializer(serializers.ModelSerializer):
     # user = RegisterSerializer()
     class Meta:
