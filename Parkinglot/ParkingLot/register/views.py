@@ -11,7 +11,6 @@ from django.template.loader import render_to_string
 from django.contrib.auth.models import User
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.utils.encoding import force_bytes, force_text
-from Tools.scripts import generate_token
 from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import ListModelMixin
 from django.contrib.auth.tokens import PasswordResetTokenGenerator

@@ -26,15 +26,15 @@ DEBUG=(bool, False)
 # reading .env file
 environ.Env.read_env()
 
-HOST=env('HOST')
-JWT_SECRET_KEY = env('JWT_SECRET_KEY')
-REDIS_PORT=env('REDIS_PORT')
-REDIS_HOST=env('REDIS_HOST')
-DATABASE_NAME = env('DATABASE_NAME')
-DATABASE_USER = env('DATABASE_USER')
-DATABASE_PASSWORD = env('DATABASE_PASSWORD')
-DATABASE_HOST = env('DATABASE_HOST')
-DATABASE_PORT = env('DATABASE_PORT') 
+HOST=os.environ.get('HOST')
+JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY')
+REDIS_PORT=os.environ.get('REDIS_PORT')
+REDIS_HOST=os.environ.get('REDIS_HOST')
+DATABASE_NAME = os.environ.get('DATABASE_NAME')
+DATABASE_USER = os.environ.get('DATABASE_USER')
+DATABASE_PASSWORD = os.environ.get('DATABASE_PASSWORD')
+DATABASE_HOST = os.environ.get('DATABASE_HOST')
+DATABASE_PORT = os.environ.get('DATABASE_PORT') 
 
 from .email_info import *
 EMAIL_USE_TLS = EMAIL_USE_TLS
