@@ -65,6 +65,19 @@ class ParkingView(LoginRequiredMixin, LotSizeRequiredMixin, viewsets.ModelViewSe
         serializer.save(driver_type=user)
         vehicle_object = vehicle.objects.get(id=serializer.data['vehicle_number'])
         send_mail_to_user_when_vehicle_is_parked.delay(vehicle_object.vehicle_owner_email)
+    
+    @action(detail=True, methods=["GET"])
+    def records(self, request, pk=None):
+        queryset = ParkingModel.objects.filter(vehicle_number__vehicle_number_plate=pk)
+        serializer = ParkingSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    @action(detail=False, methods=["GET"])
+    def parked(self, request, *args, **kwargs):
+    def parked(self, request, *args, **kwargs):        
+        queryset = ParkingModel.objects.filter(exit_time=None)
+        serializer = ParkingSerializer(queryset, many=True)
+        return Response(serializer.data)
      
     def destroy(self, request, *args, **kwargs):
         charges = 0

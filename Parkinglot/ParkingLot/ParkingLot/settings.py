@@ -159,4 +159,4 @@ USE_TZ = False
 STATIC_URL = '/static/'
 CELERY_RESULT_BACKEND = 'django-db'
 CELERY_CACHE_BACKEND = 'django-cache'
-CELERY_TASK_ALWAYS_EAGER = True
+CELERY_BROKER_URL = 'aqmp://guest:guest@rabbitmq:5672//'
