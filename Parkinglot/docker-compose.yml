@@ -16,16 +16,22 @@ services:
     restart: always
   web:
     build: "."
-    command: bash -c "python3 ParkingLot/manage.py makemigrations && python3 ParkingLot/manage.py migrate && python3 ParkingLot/manage.py runserver 0.0.0.0:8000"
+    command: bash -c " sleep 20; python3 ParkingLot/manage.py makemigrations && python3 ParkingLot/manage.py migrate && python3 ParkingLot/manage.py runserver 0.0.0.0:8000 && cd ParkingLot && celery -A ParkingLot worker -l info"
     volumes:
       - ".:/app"
     ports:
       - "8000:8000"
     depends_on:
       - db
+      - rabbitmq
+    restart: always
   rabbitmq:
-    image: rabbitmq:latest
-    command: bash -c "rabbitmq-server && cd ParkingLot && celery -A ParkingLot worker - info"
+    container_name: rabbitmq
+    image: rabbitmq:3-management
+    environment:
+      - RABBITMQ_DEFAULT_USER=user
+      - RABBITMQ_DEFAULT_PASS=pass
+      - RABBITMQ_DEFAULT_VHOST=/
     ports:
       - "5672:5672"
       - "15672:15672"

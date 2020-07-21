@@ -73,7 +73,6 @@ class ParkingView(LoginRequiredMixin, LotSizeRequiredMixin, viewsets.ModelViewSe
         return Response(serializer.data)
 
     @action(detail=False, methods=["GET"])
-    def parked(self, request, *args, **kwargs):
     def parked(self, request, *args, **kwargs):        
         queryset = ParkingModel.objects.filter(exit_time=None)
         serializer = ParkingSerializer(queryset, many=True)
