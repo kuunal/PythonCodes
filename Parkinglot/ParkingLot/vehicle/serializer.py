@@ -13,7 +13,7 @@ class VehicleSerializer1(serializers.ModelSerializer):
     class Meta:
         model = VehicleTypeModel
         fields = ['vehicle_type', 'charge']
-        read_only_fields = ('charge',)
+        read_only_fields = ['charge',]
 
 
 class VehicleInformationSerializer(serializers.ModelSerializer):
