@@ -18,7 +18,7 @@ class VehicleView(viewsets.ModelViewSet):
    
     def create(self, request):
         vehicle_type = request.data.get('vehicle_type')
-        vehicle_type_object = VehicleTypeModel.objects.get(id = vehicle_type)
+        vehicle_type_object = VehicleTypeModel.objects.get(vehicle_type = vehicle_type)
         serializer = VehicleInformationSerializer(data = request.data)
         if serializer.is_valid():   
             if len(Vehicle.objects.filter(vehicle_number_plate=request.data['vehicle_number_plate']))>0:

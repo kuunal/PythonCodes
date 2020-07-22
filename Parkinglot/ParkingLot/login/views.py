@@ -30,7 +30,10 @@ from django.views.decorators.csrf import csrf_exempt
 class UserLoginViews(APIView):
     serializer_class = LoginSerializer
     redis_instance = get_redis_instance()
-  
+
+    def get(self, request):
+        return Response(get_status_codes(401))
+
     @csrf_exempt
     def post(self, request):
         email = request.data['email']

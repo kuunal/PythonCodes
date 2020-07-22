@@ -14,17 +14,8 @@ services:
       - "/home/ubuntu/db/init.sql:/init"
       - "/home/ubuntu/db/dbdata:/var/lib/mysql"
     restart: always
-  web:
-    build: "."
-    command: bash -c " sleep 20; python3 ParkingLot/manage.py makemigrations && python3 ParkingLot/manage.py migrate && python3 ParkingLot/manage.py runserver 0.0.0.0:8000 && cd ParkingLot && celery -A ParkingLot worker -l info"
-    volumes:
-      - ".:/app"
-    ports:
-      - "8000:8000"
-    depends_on:
-      - db
-      - rabbitmq
-    restart: always
+
+
   rabbitmq:
     container_name: rabbitmq
     image: rabbitmq:3-management
@@ -39,3 +30,21 @@ services:
      image: redis:latest
      ports:
        - '6379:6379'
+  web:
+    build: "."
+    command:
+      bash -c "sleep 20; cd ParkingLot
+      &&  python3 manage.py makemigrations
+      && python3 manage.py migrate
+      && (nohup celery -A ParkingLot worker &)
+      && python3 manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - ".:/app"
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - rabbitmq
+      - redis
+    restart: always
+
