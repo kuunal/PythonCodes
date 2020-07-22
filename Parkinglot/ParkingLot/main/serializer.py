@@ -56,7 +56,7 @@ class ParkingSerializer(serializers.ModelSerializer):
         vehicle_number = validated_data.get('vehicle_number')
         parking_model_instance = ParkingModel(**validated_data)
         if len(ParkingSlotModel.objects.filter(vehicle_number=vehicle_number)) > 0:
-            raise serializers.ValidationError("vehicle already parked")
+            raise serializers.ValidationError({"status:400":"message: Vehicle already parked"})
         park_vehicle = ParkingSlotModel.objects.filter(vehicle_number=None).first()
         if park_vehicle:
             park_vehicle.slot_id=get_slot()

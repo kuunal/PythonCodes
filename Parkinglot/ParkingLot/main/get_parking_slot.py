@@ -16,7 +16,7 @@ def get_slot():
         return 1
     elif unparked_slot == None and initialized_slots >= total_slot:
         tasks.send_mail_to_owner_when_lot_is_full(" ")
-        raise ValidationError("Lot Full")
+        raise ValidationError({"status":400,"message":"Lot Full"})
     if unparked_slot:
         send_mail_to_floor(unparked_slot, slot_per_floor_list, slot_per_floor)
         return unparked_slot.id
