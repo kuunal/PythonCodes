@@ -1,11 +1,7 @@
 FROM python:3
 RUN apt-get update
-ENV PYTHONUNBUFFERED = 1 
+RUN pip install mysqlclient
 RUN mkdir /app
 WORKDIR /app
-ADD . /app/
-RUN pipenv install -r Pipfile
-
-# RUN sudo apt install python3 mysql-server
-
-
+ADD . /app
+RUN pip3 install -r bookstore/requirement.txt
