@@ -23,14 +23,17 @@ from django.utils.http import urlsafe_base64_decode
 from ParkingLot.redis_setup import get_redis_instance
 from django.utils.encoding import force_text
 from django.views.decorators.csrf import csrf_exempt
-
+from rest_framework.response import Response
 
 # Create your views here.
 
 class UserLoginViews(APIView):
     serializer_class = LoginSerializer
     redis_instance = get_redis_instance()
-  
+    
+    def get(self, request):
+        return Response({'status':401, 'message':'please login first'})
+
     @csrf_exempt
     def post(self, request):
         email = request.data['email']
