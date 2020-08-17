@@ -30,9 +30,9 @@ def get_current_user(request):
         return False
 
 def unpark(instance):
-    slot_object = get_object_or_404(slot,slot_id=instance.parking_slot)
-    if slot_object.vehicle_number == "null" :
-        raise ValidationError("No such vehicle parked!")
+    slot_object = get_object_or_404(slot,vehicle_number=instance.vehicle_number)
+    if slot_object.vehicle_number == None:
+        raise ValidationError({"status":400,"message":"No such vehicle parked!"})
     vehicle_number = slot_object.vehicle_number
     total_charges = calculate_charges(instance, vehicle_number)
     slot_object.vehicle_number = None

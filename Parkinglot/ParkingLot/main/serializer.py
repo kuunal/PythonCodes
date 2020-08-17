@@ -46,7 +46,7 @@ class ParkingSerializer(serializers.ModelSerializer):
     driver_type = UserSerializer(read_only=True)
     class Meta:
         model = ParkingModel    
-        fields = ('parking_slot','vehicle_number', 'disabled', 'parking_type', 'entry_time', 'exit_time', 'driver_type')
+        fields = ('id','parking_slot','vehicle_number', 'disabled', 'parking_type', 'entry_time', 'exit_time', 'driver_type')
         read_only_fields = ('entry_time', 'parking_slot', 'driver_type')
         depth = 3
 

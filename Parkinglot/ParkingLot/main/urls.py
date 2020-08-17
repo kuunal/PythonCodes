@@ -7,13 +7,13 @@ from vehicle.views import VehicleView
 
 
 router = routers.DefaultRouter()
-router.register('park', ParkingView)
+router.register('', ParkingView)
 router.register('vehicletype', VehicleTypeView)
 router.register('parkingtype', ParkingTypeView)
 
 
 vehicle_router = routers.DefaultRouter()
-vehicle_router.register('park', VehicleView)
+vehicle_router.register('', VehicleView)
 
 lot = routers.DefaultRouter()
 lot.register('', ParkingLotView)
