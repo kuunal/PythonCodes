@@ -6,7 +6,7 @@ from django.core.mail import send_mail
 from django.contrib.auth.models import User
 
 
-def send_verification(user_email, subject, message, host=settings.HOST):
+def send_verification(user_email, subject, message, host=settings.HOST+""+settings.PORT):
     user = User.objects.filter(email=user_email)
     subject = subject
     message = message

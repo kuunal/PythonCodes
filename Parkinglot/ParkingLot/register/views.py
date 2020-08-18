@@ -5,13 +5,13 @@ from .serializer import RegisterSerializer
 from django.http import JsonResponse
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.decorators import api_view
 from ParkingLot import settings
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.contrib.auth.models import User
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.utils.encoding import force_bytes, force_text
-from Tools.scripts import generate_token
 from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import ListModelMixin
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
@@ -37,8 +37,8 @@ class RegisterViews(APIView):
             return Response(get_status_codes(201))
         return Response(serializer.errors)
     
-    
-def verify_user(request, token, email):
+@api_view(('GET',))
+def verify_user(request, token):
     email = force_text(urlsafe_base64_decode(token))
     user = User.objects.get(email=email)
     if user.is_active == True:
@@ -47,13 +47,6 @@ def verify_user(request, token, email):
     user.save()
     return redirect('login')
 
-@api_view(('GET',))
-def check_login(request):
-    redis_instance = get_redis_instance()
-    email = request.headers.get('x_token')
-    if redis_instance.get(email):
-        return Response(302)
-    return Response(200)
 
 class RegisterListView(LoginRequiredMixin, ListAPIView):
     queryset = RoleModel.objects.all()
