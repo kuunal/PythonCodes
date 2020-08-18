@@ -56,38 +56,13 @@ class UserLoginViews(APIView):
         UserLoginViews.redis_instance.set(email, auth_token)
         return Response(data)
 
-class ForgotPassView(APIView):
-    def get(self, request):
-        return render(request, "registration/forgotpassword.html")
-
-    def post(self, request):   
-        email = request.data.get('email') 
-        host=settings.HOST+"/reset"
-        if(len(User.objects.filter(email=email))==0):
-            messages.warning(request, "Email doesnt exist")
-            return render(request, "registration/forgotpassword.html")            
-        send_verification(email, "Reset password link", host) 
-        return render(request, "registration/reset.html")
-
-class ResetPassView(APIView):
-    def get(self, request, token, email):
-        return render(request, "registration/reset.html")
-    
-    def post(self, request, token, email):
-        email = force_text(urlsafe_base64_decode(email))
-        password=request.data['password']
-        user = User.objects.get(email=email)
-        serializer = ResetSerializer(user, data=request.data)
-        if serializer.is_valid():   
-            user.set_password(password)
-            user.save()
-            return redirect('login')
-        messages.warning(request, "Password should contain atleast one Capital, Symbol and number")
-
 
 @api_view(('GET',))
 def logout(request):
+    user_id = get_current_user(request)
     redis_instance = get_redis_instance()
-    for key in redis_instance.scan_iter():
-        redis_instance.delete(key)
-    return Response(get_status_codes(200))
+    try:
+        redis_instance.delete(user_id)
+    except DataError:
+        return Response({'status':400, 'message':'Please Login first '})
+    return Response({'status':200, 'message':'Logged out successfully '})
