@@ -27,6 +27,7 @@ DEBUG=(bool, False)
 environ.Env.read_env()
 
 HOST=env('HOST')
+PORT=env('PORT')
 JWT_SECRET_KEY = env('JWT_SECRET_KEY')
 REDIS_PORT=env('REDIS_PORT')
 REDIS_HOST=env('REDIS_HOST')
@@ -160,4 +161,4 @@ USE_TZ = False
 STATIC_URL = '/static/'
 CELERY_RESULT_BACKEND = "django-db"
 CELERY_CACHE_BACKEND = 'django-cache'
-CELERY_BROKER_URL = 'amqp://guest:guest@rabbitmq:5672//'
+# CELERY_BROKER_URL = 'amqp://guest:guest@rabbitmq:5672//'

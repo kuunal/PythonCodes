@@ -23,8 +23,7 @@ urlpatterns = [
     path("login/", include('login.urls')),
     path("logout/", logout),
     path("register/", include('register.urls')),
-    path("", include('register.urls')),
-    path('reset/<str:token>/<str:email>/', views.ResetPassView.as_view(), name='reset'),
+    # path("", include('register.urls')),
     path('vehicle/', include('main.urls')),
     path('lot/', include('main.urls')),
 ]
