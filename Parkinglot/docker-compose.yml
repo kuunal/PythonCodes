@@ -24,13 +24,13 @@ services:
         ports:
             - '6379:6379'
 
-    'book_store':
+    'parkinglot':
         build: .
         command:
-            bash -c "sleep 20; cd bookstore
+            bash -c "sleep 20; cd ParkingLot
             && python3 manage.py makemigrations
             && python3 manage.py migrate
-            && (celery -A bookstore worker &)
+            && (celery -A ParkingLot worker &)
             && (python3 manage.py runserver 0.0.0.0:8000 ) "
         volumes:
             - ".:/app"

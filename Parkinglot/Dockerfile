@@ -4,4 +4,4 @@ RUN pip install mysqlclient
 RUN mkdir /app
 WORKDIR /app
 ADD . /app
-RUN pip3 install -r bookstore/requirement.txt
+RUN pip3 install -r ParkingLot/requirement.txt
